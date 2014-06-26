@@ -5,4 +5,4 @@ base=`pwd`
 echo source $base/bashrc >> ~/.bashrc
 echo source $base/vimrc >> ~/.vimrc
 vim +VundleInstall
-ln -s $base/pystartup ~/.pystartup
+ln -s $base/pystartup.py ~/.pystartup
