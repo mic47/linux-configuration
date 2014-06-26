@@ -3,3 +3,5 @@
 * pythonrc
 * ipython notebook
 * git
+
+* Installation script install stuff multiple times
