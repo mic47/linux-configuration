@@ -34,7 +34,7 @@ export HISTORY_TOKEN=$(random_string 8)
 export hcmntextra='date "+%Y%m%d %R"'      # you must be really careful to get the quoting right
 
 # start using it
-export PROMPT_COMMAND='hcmnt'
+export PROMPT_COMMAND='hcmnt -eityl ~/.bash_superhistory $LOGNAME@$HOSTNAME '$HISTORY_TOKEN
 
 # ====== Prompt visual hints ==
 
