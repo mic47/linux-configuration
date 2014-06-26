@@ -146,7 +146,13 @@ hcmnt() {
 
     # strip off the old ### comment if there was one so they don't accumulate
     # then build the string (if text or extra aren't empty, add them plus a space)
-    hcmnt="${hcmnt% ### *} ### ${text:+$text }${tty:+$tty }${ip:+$ip }${extra:+$extra }$cwd"
+    if [[ $LogOpt ]]
+    then
+        # Save it as csv file
+        hcmnt="${text:+$text},${tty:+$tty},${ip:+$ip},${extra:+$extra},$cwd,${hcmnt% ### *}"
+    else
+        hcmnt="${hcmnt% ### *} ### ${text:+$text }${tty:+$tty }${ip:+$ip }${extra:+$extra }$cwd"
+    fi
 
     if [[ $LogOpt ]]
     then
