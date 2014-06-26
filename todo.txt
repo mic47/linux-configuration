@@ -1,0 +1,5 @@
+* VIM 
+* bash
+* pythonrc
+* ipython notebook
+* git
