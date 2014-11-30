@@ -8,6 +8,23 @@ set timeout
 set timeoutlen=200
 
 command! Converttohtml so $vimruntime/syntax/2html.vim
+
+set autoread
+map <tab> :tabnext<CR>
+imap <tab> <ESC>:tabnext<CR>i
+map <C-u> :tabprev<CR>
+imap <C-u> <ESC>:tabprev<CR>i
+map <C-t> :tabnew<CR>
+imap <C-t> <ESC>:tabnew<CR>
+
+imap ˙ <C-o>h
+imap ∆ <C-o>j
+imap ˚ <C-o>k
+imap ¬ <C-o>l
+map ˙ h
+map ∆ j
+map ˚ k
+map ¬ l
 " ======================= VISUAL AND UI=======================================
 set ruler 
 set mouse=a
@@ -15,6 +32,7 @@ map Q gq " no more Ex mode
 syntax on " We want this in any case
 set background=dark
 " highlight normal guibg=black guifg=white ctermbg=black ctermfg=white 
+set wildmode=longest,list,full
 set wildmenu
 set clipboard=unnamed,unnamedplus
 set printoptions=number:y
@@ -37,17 +55,17 @@ au InsertLeave * hi mystatuslinehighlight ctermbg=blue ctermfg=white
 " Search is more subtle
 highlight Search ctermbg=darkgray ctermfg=white
 
-nnoremap // :noh<cr>
-function! My_tab_completion()
-    if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
-        return "\<c-n>"
-    else
-        return "\<tab>"
-endfunction
-inoremap <tab> <c-r>=My_tab_completion()<cr>
-
-map <tab> <ctrl-ww>
-map <s-tab> <c>w
+"nnoremap // :noh<cr>
+"function! My_tab_completion()
+"    if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
+"        return "\<c-n>"
+"    else
+"        return "\<tab>"
+"endfunction
+"inoremap <tab> <c-r>=My_tab_completion()<cr>
+"
+"map <tab> <ctrl-ww>
+"map <s-tab> <c>w
 
 function! GoogleUnderCursor()
 	let s:man = "firefox www.google.sk/search?q="
@@ -72,14 +90,14 @@ else
 endif
 
 " Turn off arrow key
-nnoremap <up> <nop>
-nnoremap <down> <nop>
-nnoremap <left> <nop>
-nnoremap <right> <nop>
-nnoremap <up> <nop>
-inoremap <down> <nop>
-inoremap <left> <nop>
-inoremap <right> <nop>
+"nnoremap <up> <nop>
+"nnoremap <down> <nop>
+"nnoremap <left> <nop>
+"nnoremap <right> <nop>
+"nnoremap <up> <nop>
+"inoremap <down> <nop>
+"inoremap <left> <nop>
+"inoremap <right> <nop>
 
 nnoremap + <C-a>
 nnoremap - <C-x>
@@ -97,10 +115,10 @@ set fencs=utf8,latin2,iso-8859-2,cp1250,utf16,windows-1250
 set spelllang=en ",sk
 set spell
 " ======================= PROGRAMMING AND LATEX SECTION ======================
-set shiftwidth=4
+set shiftwidth=2
 set expandtab
-set softtabstop=4
-set tabstop=4
+set softtabstop=2
+set tabstop=2
 set smarttab
 set autoindent
     "set smartindent
@@ -123,7 +141,7 @@ function! TEXSET()
   " najskor ide moj slovnik s najcastejsimi prikazmi
   set complete=k,.,w,b,u,t,i
   let &dictionary =  "~/.vim/dict/tex.dict"
-  set textwidth=80
+  "set textwidth=80
   set spell
 "  map ll :set spelllang=sk
   if executable('aspell')
@@ -356,7 +374,12 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 Plugin 'mhinz/vim-signify'
 Plugin 'mbbill/undotree'
-
+Plugin 'scrooloose/nerdtree'
+Plugin 'kien/ctrlp.vim'
+Plugin 'Valloric/YouCompleteMe'
+Bundle 'jordwalke/VimSplitBalancer'
+"Plugin 'showmarks'
+let g:ycm_filetype_specific_completion_to_disable = {}
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo
@@ -423,7 +446,7 @@ if exists("+undofile")
 endif
 
 " Toogle paste
-set pastetoggle=<F12> "enable paste toggle and map it to F8
+set pastetoggle=<F2> "enable paste toggle and map it to F8
 
 
 "80 character line color: TODO: softer color (darkgray)
