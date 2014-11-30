@@ -10,17 +10,22 @@ function parse_git_branch {
               -e 's/* \(.*\)/(\1)/' 
     )
     if [ "$branch" == "" ]; then
+        branch=$(
+        hg bookmark 2>/dev/null | grep -e '\*' | sed -e 's/[ *]*/(/;s/ .*/)/' 
+        )
+    fi
+    if [ "$branch" == "" ]; then
         echo ""
     else
         echo $branch \
         | sed -e 's/^(master)$/'`printf "$LIGHT_RED"`'(master)/' \
-        | sed -e 's/$/ '`git status -s |grep -v '??' | wc -l`' file(s) changed/' \
-        | sed -e 's/^/\n'`printf "$LIGHT_GREEN"`'branch: /' \
+        | sed -e 's/^/\n'`printf "$LIGHT_GREEN"`'Feature: /' \
         | sed -e 's/$/'`printf "$DEFAULT"`'/'
+        #| sed -e 's/$/ '`git status -s |grep -v '??' | wc -l`' file(s) changed/' \
     fi
 }
 
-function alert {
-    notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e 's/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//')"
+function send_alert {
+  echo "$([ $? = 0 ] && echo Success: || echo Error:)" "$(history|tail -n 1|sed -e 's/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//')" | nc localhost 2344
 }
 

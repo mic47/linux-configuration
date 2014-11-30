@@ -77,7 +77,7 @@ hcmnt() {
     do
         case $option in
             e ) ExtraOpt=1;;        # include hcmntextra
-            i ) ip="$(who --ips -m)" # include the terminal's ip address
+            i ) ip="$(who -m)" # include the terminal's ip address
                 ip=($ip)
                 ip="${ip[4]}"
                 if [[ -z $ip ]]

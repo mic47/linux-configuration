@@ -23,8 +23,8 @@ export BC_LINE_LENGTH=0
 
 export HISTCONTROL=ignorespace
 shopt -s histappend
-export HISTSIZE=-1
-export HISTFILESIZE=-1
+export HISTSIZE=99999999
+export HISTFILESIZE=99999999
 shopt -s checkwinsize
 export HISTTIMEFORMAT='%F %T '
 
@@ -39,23 +39,27 @@ export PROMPT_COMMAND='hcmnt -eityl ~/.bash_superhistory $LOGNAME@$HOSTNAME '$HI
 # ====== Prompt visual hints ==
 
 declare __timer
+declare __timer2
 
 function pre_command {
+       export __timer2=$__timer
        export __timer=$(date +%s)
 }
 
 function post_command {
-    local __delta=$(($(date +%s) - $__timer))
-    #if [[ $__delta > 10 ]]; then
-        #alert
-    #fi
-    export __timer=$(date +%s)
-    echo $__delta
+    local __wuut=$__timer2
+    local __delta=$(($(date +%s) - $__wuut))
+    local alert=''
+    if [[ $__delta > 10 ]]; then
+        alert=$'\a'
+        $(send_alert)
+    fi
+    echo $__delta$alert
 }
 
 trap 'pre_command' DEBUG
 function proml {
-    PS1="\[\033[1;33m\]Last command was executed \$(post_command) second(s) ago\[\033[1;0m\]\$(parse_git_branch)\n$PS1"
+    PS1="\[\033[1;33m\]Last command took \$(post_command) second(s)\[\033[1;0m\]\$(parse_git_branch)\n$PS1"
 }
 proml
 
@@ -100,10 +104,13 @@ alias cpu07='ssh -t cpu07 "cd `pwd` && bash"'
 
 alias eqstat="qstat -f -u '*' -F memory,threads"
 
-ulimit -u 1000
+#ulimit -u 1000
 
 if [ "`uname -n`" == "compbio" ]; then
 	ulimit -m 2097152
 fi
 
 alias logtail="pypy bin/logTailer.py output"
+alias kill_zombies='sudo kill -HUP $(ps -A -ostat,ppid | grep -e "[zZ]"| awk "{ print \$2 }")'
+set -o vi
+
