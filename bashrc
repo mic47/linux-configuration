@@ -114,3 +114,4 @@ alias logtail="pypy bin/logTailer.py output"
 alias kill_zombies='sudo kill -HUP $(ps -A -ostat,ppid | grep -e "[zZ]"| awk "{ print \$2 }")'
 set -o vi
 
+alias tsh="python $SOURCE_DIR/bin/tsh.py"
