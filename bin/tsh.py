@@ -10,7 +10,7 @@ import socket
 home_directory = os.path.expanduser("~")
 
 hostnames = {
-   'shall-we-begin': ['mic@shall-we-begin.local', 'mic@ksp.sk:7868', 'tor:mic@mic????.onion'],
+   'shall-we-begin': ['mic@shall-we-begin.local', 'mic@ksp.sk:47022', 'tor:mic@mic47cake2dfg5qb.onion'],
    'ksp.sk': ['mic@ksp.sk'],
    'compbio.fmph.uniba.sk': ['mic@compbio.fmph.uniba.sk'],
    'panda-cub': ['mic@panda-cub.local'],
@@ -69,7 +69,7 @@ def get_candidate(candidates):
         except:
             continue
         return (protocol, hostname, port)
-    raise QuitWithExitcode(1, 'None of the hostnames are available')
+    raise QuitWithExitcode(1, 'None of the hostnames are available: ' + ' '.join(map(lambda x: ':'.join(map(str,x)), candidates)))
 
 def regexp_fil(x, name):
     if name == None:
@@ -106,7 +106,7 @@ def main(args):
     cmd_param = filter(lambda x: regexp_fil(x, server), tunnels.iteritems())
     cmd_param.extend(filter(lambda x: regexp_fil(x, server), parameters.iteritems()))
     
-    shell = '~/bin/tmux_list.sh'
+    shell = "'~/bin/tmux_list.sh'"
     if args.session != '':
         shell = 'tmux new-session -A -s "{}"'.format(args.session)
     
