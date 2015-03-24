@@ -20,7 +20,9 @@ parameters = {
     '.*': ['-CtX']
 }
 
-tunnels = {}
+tunnels = {
+    'compbio*': ["-L", "7777:localhost:7777"],
+}
 
 class QuitWithExitcode(Exception):
     def __init__(self, exit_code, msg=None, exception=None):
