@@ -58,8 +58,13 @@ function post_command {
 }
 
 trap 'pre_command' DEBUG
+
+function future_command {
+    head -n 1 ~/.future
+}
+
 function proml {
-    PS1="\[\033[1;33m\]Last command took \$(post_command) second(s)\[\033[1;0m\]\$(parse_git_branch)\n$PS1"
+PS1="\[\033[1;33m\]Last command took \$(post_command) second(s)\[\033[1;0m\]\$(parse_git_branch)\n\$(future_command)\n$PS1"
 }
 proml
 
@@ -174,3 +179,10 @@ sizeup () {
   echo $'\e[1;33;40m'"Total: "$'\e[1;32;40m'"$(__sizeup_humanize $totalb)"$'\e[1;33;40m'" in $counter files"$'\e[0m'
 }
 
+function next_command {
+    eval `future_command`
+    cat ~/.future | tac | head -n -1 | tac > /tmp/.future
+    cp /tmp/.future ~/.future
+}
+
+alias vimall='vim -O`hg status --rev .^ -a -m | sed -e "s/^. //"|wc -l` `hg status --rev .^ -a -m | sed -e "s/^. //"`'
