@@ -51,7 +51,7 @@ function post_command {
     local __delta=$(($(date +%s) - $__wuut))
     local alert=''
     if [[ $__delta -ge 10 ]]; then
-        alert=$'\a'
+        alert=$'\a';
         $(send_alert)
     fi
     echo $__delta$alert

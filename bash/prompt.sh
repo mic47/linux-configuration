@@ -26,6 +26,15 @@ function parse_git_branch {
 }
 
 function send_alert {
-  echo "$([ $? = 0 ] && echo Success: || echo Error:)" "$(history|tail -n 1|sed -e 's/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//')" | nc localhost 2344
+  result=$([ $? = 0 ] && echo success || echo error)
+  full_cmd=$(history | tail -n 1) 
+  cmd=$(echo $full_cmd | awk '{print $2;}')
+
+  subject="Command $cmd finished with $result" 
+  email=$(cat ~/.email)
+  echo "
+    $full_cmd
+    .
+  " | mail -s "$subject" $email
 }
 
