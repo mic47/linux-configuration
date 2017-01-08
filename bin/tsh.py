@@ -35,7 +35,7 @@ def parse_hostname(candidate):
         candidate = random.choice(candidate)
     x = candidate.split(':')
     protocol = 'ssh'
-    if x[0] in ['ssh', 'tor']:
+    if x[0] in ['ssh', 'tor', 'mosh', 'mosh6']:
         protocol = x[0]
         x = x[1:]
     if len(x) > 2:
@@ -62,13 +62,15 @@ def too_many_servers(server, matches):
 
 def get_candidate(candidates):
     for (protocol, hostname, port) in candidates:
+        print(protocol, hostname, port)
         try:
             if protocol != 'tor':
-                socket.gethostbyname(hostname.split('@')[-1])
+                socket.getaddrinfo(hostname.split('@')[-1], port)
             else:
                 # TODO: resolve 
                 pass
-        except:
+        except Exception as e:
+            print(e)
             continue
         return (protocol, hostname, port)
     raise QuitWithExitcode(1, 'None of the hostnames are available: ' + ' '.join(map(lambda x: ':'.join(map(str,x)), candidates)))
@@ -105,6 +107,11 @@ def main(args):
     tor_command = ''
     if protocol == 'tor' or force_tor:
         tor_command = 'torsocks '
+    ssh_command = 'ssh'
+    if protocol in ['mosh', 'mosh6']:
+        ssh_command = 'ssh'
+        if protocol[-1] == '6':
+            ssh_command += ' -6'
     cmd_param = filter(lambda x: regexp_fil(x, server), tunnels.iteritems())
     cmd_param.extend(filter(lambda x: regexp_fil(x, server), parameters.iteritems()))
     
@@ -113,8 +120,9 @@ def main(args):
         shell = 'tmux new-session -A -s "{}"'.format(args.session)
     
     cmd_param = map(lambda x: ' '.join(x[1]), cmd_param)
-    command = '{tor}ssh {param} -p {port} {hostname} {shell}'.format(
+    command = '{tor}{ssh} {param} -p {port} {hostname} {shell}'.format(
         tor = tor_command,
+        ssh = ssh_command,
         param = ' '.join(cmd_param),
         port = str(port),
         hostname = hostname,
