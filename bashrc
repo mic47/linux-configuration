@@ -50,7 +50,7 @@ function post_command {
     local __wuut=$__timer2
     local __delta=$(($(date +%s) - $__wuut))
     local alert=''
-    if [[ $__delta -ge 10 ]]; then
+    if [[ $__delta -ge 60 ]]; then
         alert=$'\a';
         $(send_alert)
     fi
@@ -185,4 +185,9 @@ function next_command {
     cp /tmp/.future ~/.future
 }
 
-alias vimall='vim -O`hg status --rev .^ -a -m | sed -e "s/^. //"|wc -l` `hg status --rev .^ -a -m | sed -e "s/^. //"`'
+alias vimall='vim -O `hg status --rev .^ -a -m -n`'
+alias vimgall='vim -O `git diff -r HEAD^1 | grep "\--- a" | sed -e "s/--- a.//"`'
+
+alias cp='cp --backup=numbered'
+alias ln='ln --backup=numbered'
+alias mv='mv -f --backup=numbered'

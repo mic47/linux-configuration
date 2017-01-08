@@ -46,12 +46,12 @@ set hlsearch
 set display+=lastline
 set display+=uhex
 
-set statusline=%<%f\ %h%m%r%=char=%b=0x%B\ \ %l,%c,%v\ %p%%
+"set statusline=%<%f\ %h%m%r%=char=%b=0x%B\ \ %l,%c,%v\ %p%%
 set laststatus=2
-set highlight+=s:mystatuslinehighlight
-highlight mystatuslinehighlight ctermbg=blue ctermfg=white
-au InsertEnter * hi mystatuslinehighlight ctermbg=green ctermfg=white
-au InsertLeave * hi mystatuslinehighlight ctermbg=blue ctermfg=white
+"set highlight+=s:mystatuslinehighlight
+"highlight mystatuslinehighlight ctermbg=blue ctermfg=white
+"au InsertEnter * hi mystatuslinehighlight ctermbg=green ctermfg=white
+"au InsertLeave * hi mystatuslinehighlight ctermbg=blue ctermfg=white
 " Search is more subtle
 highlight Search ctermbg=darkgray ctermfg=white
 
@@ -79,8 +79,8 @@ imap <C-G> <esc>:call GoogleUnderCursor()<cr><cr>i
 " TODO: google in visual mode
 
 hi LineNr term=reverse ctermbg=blue guibg=blue
-au InsertEnter * hi LineNr term=reverse ctermbg=green guibg=green
-au InsertLeave * hi LineNr term=reverse ctermbg=blue    guibg=blue
+"au InsertEnter * hi LineNr term=reverse ctermbg=green guibg=green
+"au InsertLeave * hi LineNr term=reverse ctermbg=blue    guibg=blue
 
 highlight ColorColumn ctermbg=blue guibg=blue
 if exists('+colorcolumn')
@@ -105,6 +105,43 @@ nnoremap - <C-x>
 " faster esc
 
 imap jj <esc>
+
+" dfasdf
+let s:iterm   = exists('$ITERM_PROFILE') || exists('$ITERM_SESSION_ID') || filereadable(expand("~/.vim/.assume-iterm"))
+let s:screen  = &term =~ 'screen'
+let s:tmux    = exists('$TMUX')
+let s:xterm   = &term =~ 'xterm'
+
+function! s:EscapeEscapes(string)
+  " double each <Esc>
+  return substitute(a:string, "\<Esc>", "\<Esc>\<Esc>", "g")
+endfunction
+
+function! s:TmuxWrap(string)
+  if strlen(a:string) == 0
+    return ""
+  end
+
+  let tmux_begin  = "\<Esc>Ptmux;"
+  let tmux_end    = "\<Esc>\\"
+
+  return tmux_begin . s:EscapeEscapes(a:string) . tmux_end
+endfunction
+
+" change shape of cursor in insert mode in iTerm 2
+if s:iterm
+  let start_insert  = "\<Esc>]50;CursorShape=1\x7"
+  let end_insert    = "\<Esc>]50;CursorShape=0\x7"
+
+  if s:tmux
+    let start_insert  = s:TmuxWrap(start_insert)
+    let end_insert    = s:TmuxWrap(end_insert)
+  endif
+
+  let &t_SI = start_insert
+  let &t_EI = end_insert
+endif
+
 " ======================= TEXT MANUPULATION SECTION ==========================
 set nocompatible 
 set backspace=2 
@@ -378,6 +415,8 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'kien/ctrlp.vim'
 Plugin 'Valloric/YouCompleteMe'
 Bundle 'jordwalke/VimSplitBalancer'
+Plugin 'ryanoasis/vim-webdevicons'
+Plugin 'bling/vim-airline'
 "Plugin 'scrooloose/syntastic'
 "Plugin 'showmarks'
 let g:ycm_filetype_specific_completion_to_disable = {}
@@ -480,4 +519,6 @@ set pastetoggle=<F2> "enable paste toggle and map it to F8
     set sidescroll=1 " Number of cols to scroll at a time
 
 
-
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+set t_Co=256

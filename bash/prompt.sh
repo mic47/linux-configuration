@@ -25,6 +25,8 @@ function parse_git_branch {
     fi
 }
 
+declare __last_command
+
 function send_alert {
   result=$([ $? = 0 ] && echo success || echo error)
   full_cmd=$(history | tail -n 1) 
@@ -32,9 +34,15 @@ function send_alert {
 
   subject="Command $cmd finished with $result" 
   email=$(cat ~/.email)
-  echo "
-    $full_cmd
-    .
-  " | mail -s "$subject" $email
+  touch /tmp/last_command.$$
+  __last_command=$(cat /tmp/last_command.$$)
+  if [[ "$cmd" != "vim" && "$__last_command" != "$full_cmd" ]]
+  then
+    echo "
+      $full_cmd 
+      .
+    " | mail -s "$subject" $email
+  fi
+  echo -n "$full_cmd" > /tmp/last_command.$$
 }
 
