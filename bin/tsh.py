@@ -17,7 +17,7 @@ hostnames = {
 }
 
 parameters = {
-    '.*': ['-CtX']
+    # '.*': ['-CtX']  # This is not compatible with mosh
 }
 
 tunnels = {
@@ -108,8 +108,10 @@ def main(args):
     if protocol == 'tor' or force_tor:
         tor_command = 'torsocks '
     ssh_command = 'ssh'
+    ssh_template = '{tor}{ssh} {param} -p {port} {hostname} {shell}'
     if protocol in ['mosh', 'mosh6']:
-        ssh_command = 'ssh'
+        ssh_command = 'mosh'
+        ssh_template = '{tor}{ssh} {param} -p {port} {hostname} -- {shell}'
         if protocol[-1] == '6':
             ssh_command += ' -6'
     cmd_param = filter(lambda x: regexp_fil(x, server), tunnels.iteritems())
@@ -120,7 +122,7 @@ def main(args):
         shell = 'tmux new-session -A -s "{}"'.format(args.session)
     
     cmd_param = map(lambda x: ' '.join(x[1]), cmd_param)
-    command = '{tor}{ssh} {param} -p {port} {hostname} {shell}'.format(
+    command = ssh_template.format(
         tor = tor_command,
         ssh = ssh_command,
         param = ' '.join(cmd_param),
