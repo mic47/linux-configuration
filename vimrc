@@ -1,4 +1,7 @@
 "
+HG: Consider using `hg commit -m 'One line title' && arc diff`.
+HG: You will save time by running lint and unit in the background.
+
 " Mic's .vimrc 
 " inspired by .vimrc by MisoF (http://people.ksp.sk/~misof/programy/vimrc.html)
 "
@@ -357,16 +360,16 @@ autocmd FileType pmwiki      call PMWIKISET()
 set nocp
 filetype plugin on 
 map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
-let OmniCpp_NamespaceSearch = 2
-let OmniCpp_DisplayMode = 0
-let OmniCpp_ShowScopeInAbbr = 1
-let OmniCpp_ShowPrototypeInAbbr = 1
-let OmniCpp_ShowAccess = 1
-let OmniCpp_MayCompleteDot = 1
-let OmniCpp_MayCompleteArrow = 1
-let OmniCpp_MayCompleteScope = 0
-let OmniCpp_SelectFirstItem = 0
-set tags+=~/.stl.tag
+" let OmniCpp_NamespaceSearch = 2
+" let OmniCpp_DisplayMode = 0
+" let OmniCpp_ShowScopeInAbbr = 1
+" let OmniCpp_ShowPrototypeInAbbr = 1
+" let OmniCpp_ShowAccess = 1
+" let OmniCpp_MayCompleteDot = 1
+" let OmniCpp_MayCompleteArrow = 1
+" let OmniCpp_MayCompleteScope = 0
+" let OmniCpp_SelectFirstItem = 0
+" set tags+=~/.stl.tag
 
 " }}}
 " ======================================================================================================
@@ -413,13 +416,16 @@ Plugin 'mhinz/vim-signify'
 Plugin 'mbbill/undotree'
 Plugin 'scrooloose/nerdtree'
 Plugin 'kien/ctrlp.vim'
-Plugin 'Valloric/YouCompleteMe'
+" Plugin 'Valloric/YouCompleteMe'
+Plugin 'YouCompleteMe', {'pinned': 1}
 Bundle 'jordwalke/VimSplitBalancer'
 Plugin 'ryanoasis/vim-webdevicons'
 Plugin 'bling/vim-airline'
-"Plugin 'scrooloose/syntastic'
+Plugin 'phleet/vim-arcanist'
+Plugin 'scrooloose/syntastic'
+Plugin 'dodie/vim-disapprove-deep-indentation'
 "Plugin 'showmarks'
-let g:ycm_filetype_specific_completion_to_disable = {}
+" let g:ycm_filetype_specific_completion_to_disable = {}
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo
@@ -438,6 +444,12 @@ let g:ycm_filetype_specific_completion_to_disable = {}
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
+
+let g:LookOfDisapprovalTabTreshold=5
+let g:LookOfDisapprovalSpaceTreshold=(&tabstop*5)
+
+let g:signify_sign_overwrite = 0
+
 filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
 "filetype plugin on

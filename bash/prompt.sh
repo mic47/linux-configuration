@@ -13,11 +13,18 @@ function parse_git_branch {
         branch=$(
         hg bookmark 2>/dev/null | grep -e '\*' | sed -e 's/[ *]*/(/;s/ .*/)/' 
         )
+        commit=$(
+        hg log |grep summary | head -n 1  | sed -e 's/^summary:[ \t]*//'
+        )
+    else
+        commit=$(
+        git log | head -n 5 | tail -n 1 | sed -e 's/^[ \t]*//'
+        )
     fi
-    if [ "$branch" == "" ]; then
+    if [ "$commit" == "" ]; then
         echo ""
     else
-        echo $branch \
+        echo $commit \
         | sed -e 's/^(master)$/'`printf "$LIGHT_RED"`'(master)/' \
         | sed -e 's/^/\n'`printf "$LIGHT_GREEN"`'Feature: /' \
         | sed -e 's/$/'`printf "$DEFAULT"`'/'
