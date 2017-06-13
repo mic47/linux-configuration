@@ -64,7 +64,7 @@ function future_command {
 }
 
 function proml {
-PS1="\[\033[1;33m\]Last command took \$(post_command) second(s)\[\033[1;0m\]\$(parse_git_branch)\n\$(future_command)\n$PS1"
+PS1="\[\033[1;33m\][$(date)] Last command took \$(post_command) second(s)\[\033[1;0m\]\$(parse_git_branch)\n\$(future_command)\n$PS1"
 }
 proml
 
@@ -185,8 +185,8 @@ function next_command {
     cp /tmp/.future ~/.future
 }
 
-alias vimall='vim -O `hg status --rev .^ -a -m -n`'
-alias vimgall='vim -O `git diff -r HEAD^1 | grep "+++ b" | sed -e "s/+++ b.//"`'
+alias vimall='vim `hg status --rev .^ -a -m -n`'
+alias vimgall='vim `git diff -r HEAD^1 | grep "+++ b" | sed -e "s/+++ b.//"`'
 
 alias cp='cp --backup=numbered'
 alias ln='ln --backup=numbered'
