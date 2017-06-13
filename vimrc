@@ -1,7 +1,3 @@
-"
-HG: Consider using `hg commit -m 'One line title' && arc diff`.
-HG: You will save time by running lint and unit in the background.
-
 " Mic's .vimrc 
 " inspired by .vimrc by MisoF (http://people.ksp.sk/~misof/programy/vimrc.html)
 "
@@ -13,12 +9,12 @@ set timeoutlen=200
 command! Converttohtml so $vimruntime/syntax/2html.vim
 
 set autoread
-map <tab> :tabnext<CR>
-imap <tab> <ESC>:tabnext<CR>i
-map <C-u> :tabprev<CR>
-imap <C-u> <ESC>:tabprev<CR>i
-map <C-t> :tabnew<CR>
-imap <C-t> <ESC>:tabnew<CR>
+map <tab> :bnext<CR>
+map <c-i> :bnext<CR>
+imap <c-i> <ESC>:bnext<CR>i
+map <S-tab> :bprev<CR>
+map <c-u> :bprev<CR>
+imap <c-u> <ESC>:bprev<CR>i
 
 imap ˙ <C-o>h
 imap ∆ <C-o>j
@@ -48,6 +44,8 @@ set hlsearch
 
 set display+=lastline
 set display+=uhex
+
+let g:VimSplitBalancerSupress=1
 
 "set statusline=%<%f\ %h%m%r%=char=%b=0x%B\ \ %l,%c,%v\ %p%%
 set laststatus=2
@@ -81,16 +79,18 @@ map <C-G> :call GoogleUnderCursor()<cr><cr>
 imap <C-G> <esc>:call GoogleUnderCursor()<cr><cr>i
 " TODO: google in visual mode
 
-hi LineNr term=reverse ctermbg=blue guibg=blue
+" hi LineNr term=reverse ctermbg=blue guibg=blue
 "au InsertEnter * hi LineNr term=reverse ctermbg=green guibg=green
 "au InsertLeave * hi LineNr term=reverse ctermbg=blue    guibg=blue
 
-highlight ColorColumn ctermbg=blue guibg=blue
-if exists('+colorcolumn')
-  set colorcolumn=80,120
-else
-  au BufWinEnter * let w:m2=matchadd('ColorColumn', '\%>80v.\+', -1)
-endif
+set synmaxcol=80
+
+" highlight ColorColumn ctermbg=blue guibg=blue
+" if exists('+colorcolumn')
+"   set colorcolumn=80,120
+" else
+"   au BufWinEnter * let w:m2=matchadd('ColorColumn', '\%>80v.\+', -1)
+" endif
 
 " Turn off arrow key
 "nnoremap <up> <nop>
@@ -256,7 +256,7 @@ function! CPPSET()
   set foldmarker=//{{{,//}}}
   set fdm=marker
 
-  map <C-i> ma:%!astyle --indent-classes --pad-oper --pad-paren-out`a
+  " map <C-i> ma:%!astyle --indent-classes --pad-oper --pad-paren-out`a
 
 endfunction
 "  }}}
@@ -418,7 +418,7 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'kien/ctrlp.vim'
 " Plugin 'Valloric/YouCompleteMe'
 Plugin 'YouCompleteMe', {'pinned': 1}
-Bundle 'jordwalke/VimSplitBalancer'
+"Bundle 'jordwalke/VimSplitBalancer'
 Plugin 'ryanoasis/vim-webdevicons'
 Plugin 'bling/vim-airline'
 Plugin 'phleet/vim-arcanist'
