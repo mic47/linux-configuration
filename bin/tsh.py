@@ -73,6 +73,7 @@ def get_candidate(candidates):
             print(e)
             continue
         return (protocol, hostname, port)
+    return candidates[0]
     raise QuitWithExitcode(1, 'None of the hostnames are available: ' + ' '.join(map(lambda x: ':'.join(map(str,x)), candidates)))
 
 def regexp_fil(x, name):
@@ -111,7 +112,7 @@ def main(args):
     ssh_template = '{tor}{ssh} {param} -p {port} {hostname} {shell}'
     if protocol in ['mosh', 'mosh6']:
         ssh_command = 'mosh'
-        ssh_template = '{tor}{ssh} {param} -p {port} {hostname} -- {shell}'
+        ssh_template = '{tor}{ssh} {param} --ssh="ssh -p {port}" {hostname} -- {shell}'
         if protocol[-1] == '6':
             ssh_command += ' -6'
     cmd_param = filter(lambda x: regexp_fil(x, server), tunnels.iteritems())
