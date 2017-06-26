@@ -46,6 +46,7 @@ set display+=lastline
 set display+=uhex
 
 let g:VimSplitBalancerSupress=1
+set ttymouse=sgr
 
 "set statusline=%<%f\ %h%m%r%=char=%b=0x%B\ \ %l,%c,%v\ %p%%
 set laststatus=2
@@ -444,6 +445,9 @@ Plugin 'dodie/vim-disapprove-deep-indentation'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
+
+let g:ctrlp_cmd = 'CtrlPMixed'
+let g:ctrlp_working_path_mode = 'c'
 
 let g:LookOfDisapprovalTabTreshold=5
 let g:LookOfDisapprovalSpaceTreshold=(&tabstop*5)
