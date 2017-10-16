@@ -9,13 +9,17 @@ function parse_git_branch {
         | sed -e '/^[^*]/d' \
               -e 's/* \(.*\)/(\1)/' 
     )
+    
     if [ "$branch" == "" ]; then
-        branch=$(
-        hg bookmark 2>/dev/null | grep -e '\*' | sed -e 's/[ *]*/(/;s/ .*/)/' 
-        )
-        commit=$(
-        hg log |grep summary | head -n 1  | sed -e 's/^summary:[ \t]*//'
-        )
+        if [ "$(hg root 2> /dev/null )" == "" ]; then
+          branch=""
+          commit=""
+        else
+          commit=$(
+          hg log -r . |grep summary | head -n 1  | sed -e 's/^summary:[ \t]*//'
+          )
+        fi
+
     else
         commit=$(
         git log | head -n 5 | tail -n 1 | sed -e 's/^[ \t]*//'
