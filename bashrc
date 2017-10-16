@@ -192,3 +192,16 @@ alias cp='cp --backup=numbered'
 alias ln='ln --backup=numbered'
 alias mv='mv -f --backup=numbered'
 alias turbo_mode="ps -x -o %mem,pid,command=CMD |grep --color=always 'Google Chrome Helper' | sed -e 's/^ *//;s/  */ /g' | sort -n | tail -n 10  | cut -f 2 -d ' ' | xargs -n 1 kill"
+
+fn_which_vim() {
+  vim $(which $*)
+}
+
+fn_which_cat() {
+  cat $(which $*)
+}
+
+alias which_vim=fn_which_vim
+alias which_cat=fn_which_cat
+
+alias go_home_hg_you_are_drunk='hg reset -C && hg revert --all && hg clean --all && hg purge && hg up --clean .'
