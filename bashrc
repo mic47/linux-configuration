@@ -57,8 +57,6 @@ function post_command {
     echo $__delta$alert
 }
 
-trap 'pre_command' DEBUG
-
 function future_command {
     head -n 1 ~/.future
 }
@@ -205,3 +203,6 @@ alias which_vim=fn_which_vim
 alias which_cat=fn_which_cat
 
 alias go_home_hg_you_are_drunk='hg reset -C && hg revert --all && hg clean --all && hg purge && hg up --clean .'
+
+trap 'pre_command' DEBUG
+
