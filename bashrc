@@ -191,6 +191,10 @@ alias ln='ln --backup=numbered'
 alias mv='mv -f --backup=numbered'
 alias turbo_mode="ps -x -o %mem,pid,command=CMD |grep --color=always 'Google Chrome Helper' | sed -e 's/^ *//;s/  */ /g' | sort -n | tail -n 10  | cut -f 2 -d ' ' | xargs -n 1 kill"
 
+function getip {
+  getent hosts "$1" | sed -e "s/ .*//" 
+}
+
 fn_which_vim() {
   vim $(which $*)
 }
