@@ -538,3 +538,13 @@ set pastetoggle=<F2> "enable paste toggle and map it to F8
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 set t_Co=256
+
+
+function! DiffThisFile()
+  let s:patch = tempname()
+  let s:currentfile = expand("%")
+  let s:cmd = "silent !hg diff -r .:.^ ".s:currentfile." > ".s:patch." 2> /dev/null"
+  execute s:cmd
+  execute "silent vert diffpatch ".s:patch
+  execute "set nomodifiable"
+endfunction
