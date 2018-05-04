@@ -62,7 +62,7 @@ function future_command {
 }
 
 function proml {
-PS1="\[\033[1;33m\][$(date)] Last command took \$(post_command) second(s)\[\033[1;0m\]\$(parse_git_branch)\n\$(future_command)\n$PS1"
+PS1="\[\033[1;33m\][\$(date)] Last command took \$(post_command) second(s)\[\033[1;0m\]\$(parse_git_branch)\n\$(future_command)\n$PS1"
 }
 proml
 
