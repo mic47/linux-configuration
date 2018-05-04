@@ -236,3 +236,27 @@ builtin bind -x '"\C-x1": __fzf_select_from_tmux_pane'
 builtin bind '"\C-]": "\C-x1\e^\er"'
 
 trap 'pre_command' DEBUG
+
+function mega_grep {
+  grep \
+    -rn \
+    --exclude-dir=.git \
+    --exclude-dir=target \
+    --exclude=*.class \
+    --exclude-dir='$global' \
+    --exclude='*.swp' \
+    --exclude='*.swo' \
+    "$@"
+}
+
+function code_mega_grep {
+  mega_grep \
+    --exclude '*.xml' \
+    --exclude '*.json' \
+    --exclude '*.config' \
+    --exclude '*.csv' \
+    --exclude '*.txt' \
+    --exclude '*.log' \
+    --exclude '*.scala' \
+    "$@"
+}
