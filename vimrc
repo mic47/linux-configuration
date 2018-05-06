@@ -425,6 +425,7 @@ Plugin 'bling/vim-airline'
 Plugin 'phleet/vim-arcanist'
 Plugin 'scrooloose/syntastic'
 Plugin 'dodie/vim-disapprove-deep-indentation'
+Plugin 'derekwyatt/vim-scala'
 "Plugin 'showmarks'
 " let g:ycm_filetype_specific_completion_to_disable = {}
 " The following are examples of different formats supported.
@@ -548,3 +549,7 @@ function! DiffThisFile()
   execute "silent vert diffpatch ".s:patch
   execute "set nomodifiable"
 endfunction
+
+set tags=.generated.ctags;/
+
+let g:ctrlp_custom_ignore = '/target/'

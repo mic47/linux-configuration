@@ -9,5 +9,8 @@ echo source $base/vimrc >> ~/.vimrc
 vim +VundleInstall
 ln -s $base/pystartup.py ~/.pystartup
 ln -s $base/tmux.conf ~/.tmux.conf
+ln -s $base/ctags ~/.ctags
+ln -s $base/gitignore_global ~/.gitignore_global
+git config --global core.excludesfile ~/.gitignore_global
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install
