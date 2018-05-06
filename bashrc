@@ -244,8 +244,11 @@ function mega_grep {
     --exclude-dir=target \
     --exclude=*.class \
     --exclude-dir='$global' \
+    --exclude-dir='target' \
+    --exclude-dir='.idea' \
     --exclude='*.swp' \
     --exclude='*.swo' \
+    --exclude='.generated.ctags' \
     "$@"
 }
 
@@ -258,5 +261,25 @@ function code_mega_grep {
     --exclude '*.txt' \
     --exclude '*.log' \
     --exclude '*.scala' \
+    --exclude '*.ipynb' \
     "$@"
+}
+
+function mega_grep_browser {
+  xxx=$(tempfile)
+  mega_grep \
+    --color=always \
+    | head -n 2000 \
+    | ansi2html > $xxx.html
+  xdg-open $xxx.html
+}
+
+function code_mega_grep_browser {
+  xxx=$(tempfile)
+  code_mega_grep \
+    --color=always \
+    "$@" \
+    | head -n 2000 \
+    | ansi2html > $xxx.html
+  xdg-open $xxx.html
 }
