@@ -84,7 +84,7 @@ imap <C-G> <esc>:call GoogleUnderCursor()<cr><cr>i
 "au InsertEnter * hi LineNr term=reverse ctermbg=green guibg=green
 "au InsertLeave * hi LineNr term=reverse ctermbg=blue    guibg=blue
 
-set synmaxcol=80
+set synmaxcol=2048
 
 " highlight ColorColumn ctermbg=blue guibg=blue
 " if exists('+colorcolumn')
