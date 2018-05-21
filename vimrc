@@ -84,7 +84,7 @@ imap <C-G> <esc>:call GoogleUnderCursor()<cr><cr>i
 "au InsertEnter * hi LineNr term=reverse ctermbg=green guibg=green
 "au InsertLeave * hi LineNr term=reverse ctermbg=blue    guibg=blue
 
-set synmaxcol=80
+set synmaxcol=120
 
 " highlight ColorColumn ctermbg=blue guibg=blue
 " if exists('+colorcolumn')
@@ -416,15 +416,18 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'mhinz/vim-signify'
 Plugin 'mbbill/undotree'
 Plugin 'scrooloose/nerdtree'
-Plugin 'kien/ctrlp.vim'
-" Plugin 'Valloric/YouCompleteMe'
-Plugin 'YouCompleteMe', {'pinned': 1}
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'eagletmt/ghcmod-vim'
+Plugin 'Shougo/vimproc.vim'
+" Plugin 'YouCompleteMe', {'pinned': 1}
 "Bundle 'jordwalke/VimSplitBalancer'
 Plugin 'ryanoasis/vim-webdevicons'
 Plugin 'bling/vim-airline'
 Plugin 'phleet/vim-arcanist'
 Plugin 'scrooloose/syntastic'
 Plugin 'dodie/vim-disapprove-deep-indentation'
+Plugin 'stevearc/vim-arduino'
 "Plugin 'showmarks'
 " let g:ycm_filetype_specific_completion_to_disable = {}
 " The following are examples of different formats supported.
