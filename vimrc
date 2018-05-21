@@ -84,7 +84,7 @@ imap <C-G> <esc>:call GoogleUnderCursor()<cr><cr>i
 "au InsertEnter * hi LineNr term=reverse ctermbg=green guibg=green
 "au InsertLeave * hi LineNr term=reverse ctermbg=blue    guibg=blue
 
-set synmaxcol=120
+set synmaxcol=2048
 
 " highlight ColorColumn ctermbg=blue guibg=blue
 " if exists('+colorcolumn')
@@ -428,6 +428,7 @@ Plugin 'phleet/vim-arcanist'
 Plugin 'scrooloose/syntastic'
 Plugin 'dodie/vim-disapprove-deep-indentation'
 Plugin 'stevearc/vim-arduino'
+Plugin 'derekwyatt/vim-scala'
 "Plugin 'showmarks'
 " let g:ycm_filetype_specific_completion_to_disable = {}
 " The following are examples of different formats supported.
@@ -551,3 +552,7 @@ function! DiffThisFile()
   execute "silent vert diffpatch ".s:patch
   execute "set nomodifiable"
 endfunction
+
+set tags=.generated.ctags;/
+
+let g:ctrlp_custom_ignore = '/target/'

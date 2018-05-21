@@ -62,7 +62,7 @@ function future_command {
 }
 
 function proml {
-PS1="\[\033[1;33m\][$(date)] Last command took \$(post_command) second(s)\[\033[1;0m\]\$(parse_git_branch)\n\$(future_command)\n$PS1"
+PS1="\[\033[1;33m\][\$(date)] Last command took \$(post_command) second(s)\[\033[1;0m\]\$(parse_git_branch)\n\$(future_command)\n$PS1"
 }
 proml
 
@@ -236,3 +236,50 @@ builtin bind -x '"\C-x1": __fzf_select_from_tmux_pane'
 builtin bind '"\C-]": "\C-x1\e^\er"'
 
 trap 'pre_command' DEBUG
+
+function mega_grep {
+  grep \
+    -rn \
+    --exclude-dir=.git \
+    --exclude-dir=target \
+    --exclude=*.class \
+    --exclude-dir='$global' \
+    --exclude-dir='target' \
+    --exclude-dir='.idea' \
+    --exclude='*.swp' \
+    --exclude='*.swo' \
+    --exclude='.generated.ctags' \
+    "$@"
+}
+
+function code_mega_grep {
+  mega_grep \
+    --exclude '*.xml' \
+    --exclude '*.json' \
+    --exclude '*.config' \
+    --exclude '*.csv' \
+    --exclude '*.txt' \
+    --exclude '*.log' \
+    --exclude '*.scala' \
+    --exclude '*.ipynb' \
+    "$@"
+}
+
+function mega_grep_browser {
+  xxx=$(tempfile)
+  mega_grep \
+    --color=always \
+    | head -n 2000 \
+    | ansi2html > $xxx.html
+  xdg-open $xxx.html
+}
+
+function code_mega_grep_browser {
+  xxx=$(tempfile)
+  code_mega_grep \
+    --color=always \
+    "$@" \
+    | head -n 2000 \
+    | ansi2html > $xxx.html
+  xdg-open $xxx.html
+}
