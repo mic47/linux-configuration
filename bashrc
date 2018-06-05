@@ -269,6 +269,7 @@ function mega_grep_browser {
   xxx=$(tempfile)
   mega_grep \
     --color=always \
+    "$@" \
     | head -n 2000 \
     | ansi2html > $xxx.html
   xdg-open $xxx.html
@@ -283,3 +284,10 @@ function code_mega_grep_browser {
     | ansi2html > $xxx.html
   xdg-open $xxx.html
 }
+
+function pip_mega {
+ for p in python python3; do 
+   $p -m pip install "$@" ; 
+ done
+}
+

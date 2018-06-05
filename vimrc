@@ -426,6 +426,8 @@ Plugin 'phleet/vim-arcanist'
 Plugin 'scrooloose/syntastic'
 Plugin 'dodie/vim-disapprove-deep-indentation'
 Plugin 'derekwyatt/vim-scala'
+Plugin 'tpope/vim-fugitive'
+Plugin 'ensime/ensime-vim'
 "Plugin 'showmarks'
 " let g:ycm_filetype_specific_completion_to_disable = {}
 " The following are examples of different formats supported.
