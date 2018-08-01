@@ -18,3 +18,4 @@ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 
 
 echo You should also install https://github.com/luben/sctags !!!
+echo You should also install http://ensime.github.io/editors/vim/install/ !!!
