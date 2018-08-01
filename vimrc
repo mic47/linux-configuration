@@ -428,9 +428,12 @@ Plugin 'phleet/vim-arcanist'
 Plugin 'scrooloose/syntastic'
 Plugin 'dodie/vim-disapprove-deep-indentation'
 Plugin 'stevearc/vim-arduino'
-Plugin 'derekwyatt/vim-scala'
+"Plugin 'derekwyatt/vim-scala'  " maybe conflicts with ensime-vim
 Plugin 'tpope/vim-fugitive'
 Plugin 'ensime/ensime-vim'
+Plugin 'majutsushi/tagbar'
+Plugin 'luben/sctags'
+Plugin 'bam9523/vim-decompile'
 "Plugin 'showmarks'
 " let g:ycm_filetype_specific_completion_to_disable = {}
 " The following are examples of different formats supported.
@@ -554,6 +557,52 @@ function! DiffThisFile()
   execute "silent vert diffpatch ".s:patch
   execute "set nomodifiable"
 endfunction
+
+function! SCTags()
+    if executable("sctags")
+        let g:tagbar_ctags_bin = "sctags"
+        let g:tagbar_type_scala = {
+            \ 'ctagstype' : 'scala',
+            \ 'sro'       : '.',
+            \ 'kinds'     : [
+                \ 'p:packages',
+                \ 'V:values',
+                \ 'v:variables',
+                \ 'T:types',
+                \ 't:traits',
+                \ 'o:objects',
+                \ 'O:case objects',
+                \ 'c:classes',
+                \ 'C:case classes',
+                \ 'm:methods:1'
+            \ ],
+            \ 'kind2scope'  : {
+                \ 'p' : 'package',
+                \ 'T' : 'type',
+                \ 't' : 'trait',
+                \ 'o' : 'object',
+                \ 'O' : 'case_object',
+                \ 'c' : 'class',
+                \ 'C' : 'case_class',
+                \ 'm' : 'method'
+            \ },
+            \ 'scope2kind'  : {
+                \ 'package' : 'p',
+                \ 'type' : 'T',
+                \ 'trait' : 't',
+                \ 'object' : 'o',
+                \ 'case_object' : 'O',
+                \ 'class' : 'c',
+                \ 'case_class' : 'C',
+                \ 'method' : 'm'
+            \ }
+        \ }
+    endif
+endfunction
+
+if has("autocmd")
+    autocmd FileType scala call SCTags()
+endif
 
 set tags=.generated.ctags;/
 

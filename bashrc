@@ -246,6 +246,7 @@ function mega_grep {
     --exclude-dir='$global' \
     --exclude-dir='target' \
     --exclude-dir='.idea' \
+    --exclude-dir='.ensime_cache' \
     --exclude='*.swp' \
     --exclude='*.swo' \
     --exclude='.generated.ctags' \
@@ -260,7 +261,6 @@ function code_mega_grep {
     --exclude '*.csv' \
     --exclude '*.txt' \
     --exclude '*.log' \
-    --exclude '*.scala' \
     --exclude '*.ipynb' \
     "$@"
 }

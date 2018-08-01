@@ -35,18 +35,20 @@ def parse_hostname(candidate):
         candidate = random.choice(candidate)
     x = candidate.split(':')
     protocol = 'ssh'
-    if x[0] in ['ssh', 'tor', 'mosh', 'mosh6']:
+    if x[0] in ['ssh', 'tor', 'mosh', 'mosh6', 'shell']:
         protocol = x[0]
         x = x[1:]
     if len(x) > 2:
         raise QuitWithExitcode(1, 'Unable to parse hostname: ' + candidate)
     server = x[0]
     port = 22
-    if len(x) > 1:
+    if len(x) > 1 and protocol != 'shell':
         try:
             port = int(x[1])
         except ValueError:
             raise QuitWithExitcode(1, 'Port number must be string: ' + candidate)
+    if protocol == 'shell':
+        server = ':'.join(x)
     return (protocol, server, port)
 
 def get_tor_first(collection):
@@ -110,6 +112,8 @@ def main(args):
         tor_command = 'torsocks '
     ssh_command = 'ssh'
     ssh_template = '{tor}{ssh} {param} -p {port} {hostname} {shell}'
+    if protocol == 'shell':
+        ssh_template = '{hostname} -- {shell}'
     if protocol in ['mosh', 'mosh6']:
         ssh_command = 'mosh'
         ssh_template = '{tor}{ssh} {param} --ssh="ssh -p {port}" {hostname} -- {shell}'
@@ -139,6 +143,8 @@ if __name__ == "__main__":
     try:
         with open(home_directory + '/.tsh') as f:
             config = json.load(f)
+            print('wwww')
+            print(config)
             try: 
                 hostnames.update(config['hostnames'])
             except Exception as e:
@@ -155,6 +161,7 @@ if __name__ == "__main__":
                 sys.stderr.write(e.message)
                 pass
     except Exception as e:
+        print(e)
         pass
     parser = argparse.ArgumentParser(description='Connect to ssh server with tmux')
     parser.add_argument('server', type=str,

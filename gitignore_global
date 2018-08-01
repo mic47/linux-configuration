@@ -1,4 +1,7 @@
 .generated.ctags
 *.swp
 *.swo
+*.swn
+.ensime
+.ensime_cache
 __localTestData
