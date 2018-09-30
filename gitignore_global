@@ -1,4 +1,5 @@
 .generated.ctags
+.generated.sctags
 *.swp
 *.swo
 *.swn
