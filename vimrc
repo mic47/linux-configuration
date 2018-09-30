@@ -604,6 +604,7 @@ if has("autocmd")
     autocmd FileType scala call SCTags()
 endif
 
-set tags=.generated.ctags;/
+set tags=.generated.sctags;.generated.ctags;/
 
 let g:ctrlp_custom_ignore = '/target/'
+"autocmd BufWritePost *.scala :EnTypeCheck
