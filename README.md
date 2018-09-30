@@ -14,8 +14,10 @@ TODO:
 
 * Installation script install stuff multiple times
 * Clean everything
+* git@github.com:ryanoasis/nerd-fonts.git
 
 Other interesting things to install:
 https://github.com/sharkdp/bat
 https://github.com/luben/sctags
 https://github.com/typelevel/cats
+
