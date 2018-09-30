@@ -434,6 +434,7 @@ Plugin 'ensime/ensime-vim'
 Plugin 'majutsushi/tagbar'
 Plugin 'luben/sctags'
 Plugin 'bam9523/vim-decompile'
+Bundle 'https://github.com/prashanthellina/follow-markdown-links'
 "Plugin 'showmarks'
 " let g:ycm_filetype_specific_completion_to_disable = {}
 " The following are examples of different formats supported.
