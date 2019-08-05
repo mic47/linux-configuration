@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo $0
+git branch "$1-${2:-1}" "$1" || git-backup "$1" $(expr ${2:-1} + 1)

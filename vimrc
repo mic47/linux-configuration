@@ -46,7 +46,10 @@ set display+=lastline
 set display+=uhex
 
 let g:VimSplitBalancerSupress=1
-set ttymouse=sgr
+
+if !has('nvim')
+  set ttymouse=sgr
+endif
 
 "set statusline=%<%f\ %h%m%r%=char=%b=0x%B\ \ %l,%c,%v\ %p%%
 set laststatus=2
@@ -420,21 +423,26 @@ Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'eagletmt/ghcmod-vim'
 Plugin 'Shougo/vimproc.vim'
+Plugin 'vito-c/jq.vim'
 " Plugin 'YouCompleteMe', {'pinned': 1}
 "Bundle 'jordwalke/VimSplitBalancer'
 Plugin 'ryanoasis/vim-webdevicons'
 Plugin 'bling/vim-airline'
 Plugin 'phleet/vim-arcanist'
-Plugin 'scrooloose/syntastic'
+"Plugin 'scrooloose/syntastic'
 Plugin 'dodie/vim-disapprove-deep-indentation'
 Plugin 'stevearc/vim-arduino'
 "Plugin 'derekwyatt/vim-scala'  " maybe conflicts with ensime-vim
 Plugin 'tpope/vim-fugitive'
-Plugin 'ensime/ensime-vim'
+Plugin 'airblade/vim-gitgutter'
+"Plugin 'ensime/ensime-vim'
 Plugin 'majutsushi/tagbar'
 Plugin 'luben/sctags'
 Plugin 'bam9523/vim-decompile'
 Bundle 'https://github.com/prashanthellina/follow-markdown-links'
+Plugin 'w0rp/ale'
+Plugin 'ambv/black'
+Plugin 'integralist/vim-mypy'
 "Plugin 'showmarks'
 " let g:ycm_filetype_specific_completion_to_disable = {}
 " The following are examples of different formats supported.
@@ -457,7 +465,7 @@ Bundle 'https://github.com/prashanthellina/follow-markdown-links'
 call vundle#end()            " required
 
 let g:ctrlp_cmd = 'CtrlPMixed'
-let g:ctrlp_working_path_mode = 'c'
+let g:ctrlp_working_path_mode = 'rc'
 
 let g:LookOfDisapprovalTabTreshold=5
 let g:LookOfDisapprovalSpaceTreshold=(&tabstop*5)
@@ -504,8 +512,8 @@ else
 endif 
 
 " Improve up/down on wrapped lines
-nnoremap j gj
-nnoremap k gk
+"nnoremap j gj
+"nnoremap k gk
 
 " Disable paste when leaving insert mode
 au InsertLeave * set nopaste
@@ -608,4 +616,11 @@ endif
 set tags=.generated.sctags;.generated.ctags;/
 
 let g:ctrlp_custom_ignore = '/target/'
-"autocmd BufWritePost *.scala :EnTypeCheck
+if has('nvim')
+  autocmd BufWritePost *.scala :EnTypeCheck
+endif
+
+noremap <Up> <nop>
+noremap <Down> <nop>
+noremap <Left> <nop>
+noremap <Right> <nop>

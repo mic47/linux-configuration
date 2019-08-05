@@ -6,3 +6,7 @@
 .ensime
 .ensime_cache
 __localTestData
+__input/
+.scannerwork/
+__data/
+.mypy_cache/

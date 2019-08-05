@@ -183,8 +183,8 @@ function next_command {
     cp /tmp/.future ~/.future
 }
 
-alias vimall='vim `hg status --rev .^ -a -m -n`'
-alias vimgall='vim `git diff -r HEAD^1 | grep "+++ b" | sed -e "s/+++ b.//"`'
+alias vimall='nvim `hg status --rev .^ -a -m -n`'
+alias vimgall='nvim `git diff -r HEAD^1 | grep "+++ b" | sed -e "s/+++ b.//"`'
 
 alias cp='cp --backup=numbered'
 alias ln='ln --backup=numbered'
@@ -290,4 +290,8 @@ function pip_mega {
    $p -m pip install "$@" ; 
  done
 }
+
+alias pcat='pandoc -t markdown $1'
+alias occurences='sort | uniq -c | sort -n'
+alias jq_less='jq . --color-output | less -R'
 
