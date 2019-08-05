@@ -12,4 +12,4 @@ dconf
 /org/gnome/terminal/legacy/profiles:/:1157624a-6d42-4fac-bf8a-49a66be82294/use-system-font = false
 /org/gnome/terminal/legacy/profiles:/:1157624a-6d42-4fac-bf8a-49a66be82294/visible-name = 'notes'
 /org/gnome/terminal/legacy/profiles:/list = ['b1dcc9dd-5262-4d8d-a863-c897e6d979b9', '1157624a-6d42-4fac-bf8a-49a66be82294']
-/org/gnome/desktop/input-sources/xkb-options = ['grp_led:scroll', 'caps:swapescape']
+/org/gnome/desktop/input-sources/xkb-options = ['grp_led:scroll', 'caps:escape']
