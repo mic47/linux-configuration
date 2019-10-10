@@ -295,3 +295,5 @@ alias pcat='pandoc -t markdown $1'
 alias occurences='sort | uniq -c | sort -n'
 alias jq_less='jq . --color-output | less -R'
 
+alias display_internal_lowres_external_highres='xrandr --output eDP-1 --scale 2x2 && xrandr --output HDMI-2 --panning 3840x2160+3840+0'
+
