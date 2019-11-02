@@ -6,7 +6,7 @@ index be24dec..1ac8235 100644
    local line
    shopt -u nocaseglob nocasematch
    line=$(
--    HISTTIMEFORMAT= history |
+-    HISTTIMEFORMAT= builtin history |
 +    HISTTIMEFORMAT= cat <((cat ~/.bash_superhistory | grep --text -v "$HISTORY_TOKEN" | grep --text -v ",$(pwd)\(,\| ->\)" ; cat ~/.bash_superhistory | grep --text -v "$HISTORY_TOKEN" | grep --text ",$(pwd)\(,\| ->\)" ; cat ~/.bash_superhistory  | grep --text "$HISTORY_TOKEN" ) | cut -d ',' -f 6- ) |
      FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS --tac --sync -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS +m" $(__fzfcmd) |
 -    command grep '^ *[0-9]') &&
