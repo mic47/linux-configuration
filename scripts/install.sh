@@ -15,6 +15,14 @@ ln -s $base/sbt/1.0/plugins/plugins.sbt ~/.sbt/1.0/plugins/plugins.sbt
 git config --global core.excludesfile ~/.gitignore_global
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install
+cp fzf.patch ~/.fzf/
+pushd ~/.fzf
+git apply fzf.patch
+rm fzf.patch
+popd
+sudo apt update
+sudo apt install python3-dev python3-pip python3-setuptools
+sudo pip3 install thefuck
 
 
 echo You should also install https://github.com/luben/sctags !!!

@@ -1,0 +1,16 @@
+diff --git a/shell/key-bindings.bash b/shell/key-bindings.bash
+index be24dec..1ac8235 100644
+--- a/shell/key-bindings.bash
++++ b/shell/key-bindings.bash
+@@ -55,9 +55,9 @@ __fzf_history__() (
+   local line
+   shopt -u nocaseglob nocasematch
+   line=$(
+-    HISTTIMEFORMAT= history |
++    HISTTIMEFORMAT= cat <((cat ~/.bash_superhistory | grep --text -v "$HISTORY_TOKEN" | grep --text -v ",$(pwd)\(,\| ->\)" ; cat ~/.bash_superhistory | grep --text -v "$HISTORY_TOKEN" | grep --text ",$(pwd)\(,\| ->\)" ; cat ~/.bash_superhistory  | grep --text "$HISTORY_TOKEN" ) | cut -d ',' -f 6- ) |
+     FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS --tac --sync -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS +m" $(__fzfcmd) |
+-    command grep '^ *[0-9]') &&
++    command cat ) &&
+     if [[ $- =~ H ]]; then
+       sed 's/^ *\([0-9]*\)\** .*/!\1/' <<< "$line"
+     else
