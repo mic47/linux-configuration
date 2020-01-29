@@ -636,7 +636,7 @@ noremap <Up> <nop>
 noremap <Down> <nop>
 noremap <Left> <nop>
 noremap <Right> <nop>
-set grepprg=array2=();mapfile\ -t\ array2\ <\ <(git\ ls-files);grep\ -n\ --binary-files=text\ $*\ \"${array2[@]}\"\ /dev/null
+set grepprg=array2=();mapfile\ -t\ array2\ <\ <(git\ ls-files);grep\ -n\ --binary-files=text\ $*\ \"${array2[@]}\"\ /dev/null\ \\\|biggrep_parse.py\ $*
 set formatprg=par\ w110
 set nowrap
 set formatoptions-=t

@@ -3,6 +3,8 @@
 base=`pwd`
 
 mkdir -p ~/.vim/bundle
+mkdir -p ~/.local/bin
+ln -s $base/biggrep_parse.py ~/.local/bin/biggrep_parse.py
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 echo source $base/bashrc >> ~/.bashrc
 echo source $base/vimrc >> ~/.vimrc
