@@ -79,8 +79,16 @@ function! GoogleUnderCursor()
 	execute s:cmd
 endfunction
 
+function! GrepUnderCursor()
+  let s:wordundercursor = expand("<cword>")
+  let s:cmd = "grep " . s:wordundercursor
+  execute s:cmd
+endfunction
+
 map <C-G> :call GoogleUnderCursor()<cr><cr>
 imap <C-G> <esc>:call GoogleUnderCursor()<cr><cr>i
+map <C-F> :call GrepUnderCursor()<cr><cr>
+imap <C-F> <esc>:call GrepUnderCursor<cr><cr>i
 " TODO: google in visual mode
 
 " hi LineNr term=reverse ctermbg=blue guibg=blue
@@ -329,6 +337,7 @@ function! PYTHONSET()
   set softtabstop=4
   set shiftwidth=4
   set nospell
+  let b:ale_linters = ['mypy', 'pylint']
 endfunction
 
 " }}}
@@ -555,6 +564,9 @@ set pastetoggle=<F2> "enable paste toggle and map it to F8
 
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
+let g:airline_section_b = ''
+let g:airline_section_x = ''
+let g:airline_section_y = ''
 set t_Co=256
 
 
@@ -624,3 +636,7 @@ noremap <Up> <nop>
 noremap <Down> <nop>
 noremap <Left> <nop>
 noremap <Right> <nop>
+set grepprg=array2=();mapfile\ -t\ array2\ <\ <(git\ ls-files);grep\ -n\ --binary-files=text\ $*\ \"${array2[@]}\"\ /dev/null
+set formatprg=par\ w110
+set nowrap
+set formatoptions-=t

@@ -4,7 +4,7 @@ dconf
 /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/command = '/home/mic/.local/bin/terminalNotes.sh'
 /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/name = 'notes'
 /org/gnome/terminal/legacy/profiles:/:1157624a-6d42-4fac-bf8a-49a66be82294/audible-bell = false
-/org/gnome/terminal/legacy/profiles:/:1157624a-6d42-4fac-bf8a-49a66be82294/custom-command = 'vim --servername TerminalNotes /home/mic/Documents/Notes.md'
+/org/gnome/terminal/legacy/profiles:/:1157624a-6d42-4fac-bf8a-49a66be82294/custom-command = 'bash -c \'vim --servername TerminalNotes /home/mic/Dropbox/Notes/*.md\''
 /org/gnome/terminal/legacy/profiles:/:1157624a-6d42-4fac-bf8a-49a66be82294/default-size-columns = 85
 /org/gnome/terminal/legacy/profiles:/:1157624a-6d42-4fac-bf8a-49a66be82294/font = 'Monospace 9'
 /org/gnome/terminal/legacy/profiles:/:1157624a-6d42-4fac-bf8a-49a66be82294/scrollbar-policy = 'never'
