@@ -2,6 +2,7 @@ import sys
 
 token = sys.argv[1]
 pwd = sys.argv[2]
+pwd2 = sys.argv[2] + " -> "
 
 order= [[], [], []]
 for line in sys.stdin:
@@ -10,7 +11,7 @@ for line in sys.stdin:
         _, hist_token = line.rsplit(" ", maxsplit=1)
         if hist_token == token:
             order[2].append(command)
-        elif directory == pwd or (" " in directory and directory.startswith(pwd)):
+        elif directory == pwd or (directory.startswith(pwd2)):
             order[1].append(command)
         else:
             order[0].append(command)
