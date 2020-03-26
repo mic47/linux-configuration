@@ -24,51 +24,72 @@ inline bool skip_over_column_and_found_end_of_string(char* &input_line) {
   return false;
 }
 
+inline bool skip_over_column_and_check_for_token_at_the_and_and_found_end_of_string(char* token, char* &input_line, bool &found_token) {
+  char *cmp = token;
+  found_token=true;
+  for(;*input_line != 0 && *input_line != ','; ++input_line) {
+    if (*input_line == ' ') {
+      cmp=token;
+      found_token=true;
+      continue;
+    }
+    if (*cmp == *input_line && *cmp != 0) {
+      ++cmp;
+    } else {
+      found_token=false;
+    }
+  }
+  if (*input_line == ',') {
+    found_token &= *cmp == 0;
+    return false;
+  }
+  input_line = NULL;
+  return true;
+}
+
 
 int main(int argc, char* argv[]) {
     if (argc < 3) {
       fprintf(stderr, "Not enough arguments\n");
       return 1;
     }
-    vector<vector<char*> > outputs;
-    outputs.resize(3);
+    vector<char*> o1, o2;
 
     char* input_line = NULL;
+    auto input = fopen(argv[3], "r");
 
     size_t n=0;
-    while(getline(&input_line, &n, stdin) >= 0) {
+    while(getline(&input_line, &n, input) >= 0) {
         n = 0;
-        char *token, *directory, *command;
+        char *directory, *command;
         auto last_start = input_line;
-        while(*input_line != 0 && *input_line != ',') {
-            if (*input_line == ' ') last_start = input_line + 1;
-            ++input_line;
-        }
-        BAILOUT;
+        bool found_token;
+        if (skip_over_column_and_check_for_token_at_the_and_and_found_end_of_string(argv[1], input_line, found_token)) continue;
         *input_line=0;
-        token=last_start;
+        ++input_line;
         if (skip_over_column_and_found_end_of_string(input_line)) continue;
         if (skip_over_column_and_found_end_of_string(input_line)) continue;
         if (skip_over_column_and_found_end_of_string(input_line)) continue;
         last_start = input_line;
         if (skip_over_column_and_found_end_of_string(input_line)) continue;
         directory=last_start;
-        *input_line=0;
-        command=input_line+1;
+        *(input_line-1)=0;
+        command=input_line;
         input_line = NULL;
-        if (strcmp(token, argv[1]) == 0) {
-            outputs[2].push_back(command);
+        if (found_token) {
+            o2.push_back(command);
         } else if (is_directory(directory, argv[2])) {
-            outputs[1].push_back(command);
+            o1.push_back(command);
         } else {
-            fputs(command, stdout);
+            fputs_unlocked(command, stdout);
         }
 
     }
-    for (unsigned int i=0;i<outputs.size();i++) {
-        for (unsigned int j=0;j<outputs[i].size();j++) {
-           fputs(outputs[i][j], stdout);
-        }
+    for (unsigned int j=0;j<o1.size();j++) {
+       fputs_unlocked(o1[j], stdout);
+    }
+    for (unsigned int j=0;j<o2.size();j++) {
+       fputs_unlocked(o2[j], stdout);
     }
     return 0;
 }
