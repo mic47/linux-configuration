@@ -452,6 +452,7 @@ Bundle 'https://github.com/prashanthellina/follow-markdown-links'
 Plugin 'w0rp/ale'
 Plugin 'ambv/black'
 Plugin 'integralist/vim-mypy'
+Plugin 'hashivim/vim-terraform'
 "Plugin 'showmarks'
 " let g:ycm_filetype_specific_completion_to_disable = {}
 " The following are examples of different formats supported.
