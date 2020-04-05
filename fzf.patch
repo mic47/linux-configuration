@@ -1,16 +1,32 @@
 diff --git a/shell/key-bindings.bash b/shell/key-bindings.bash
-index be24dec..1ac8235 100644
+index e157b07..9fdddf4 100644
 --- a/shell/key-bindings.bash
 +++ b/shell/key-bindings.bash
-@@ -55,9 +55,9 @@ __fzf_history__() (
-   local line
-   shopt -u nocaseglob nocasematch
-   line=$(
--    HISTTIMEFORMAT= builtin history |
-+    HISTTIMEFORMAT= cat <((cat ~/.bash_superhistory | grep --text -v "$HISTORY_TOKEN" | grep --text -v ",$(pwd)\(,\| ->\)" ; cat ~/.bash_superhistory | grep --text -v "$HISTORY_TOKEN" | grep --text ",$(pwd)\(,\| ->\)" ; cat ~/.bash_superhistory  | grep --text "$HISTORY_TOKEN" ) | cut -d ',' -f 6- ) |
-     FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS --tac --sync -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS +m" $(__fzfcmd) |
--    command grep '^ *[0-9]') &&
-+    command cat ) &&
-     if [[ $- =~ H ]]; then
-       sed 's/^ *\([0-9]*\)\** .*/!\1/' <<< "$line"
-     else
+@@ -8,6 +8,7 @@
+ # - $FZF_CTRL_T_COMMAND
+ # - $FZF_CTRL_T_OPTS
+ # - $FZF_CTRL_R_OPTS
++# - $FZF_CTRL_R_COMMAND
+ # - $FZF_ALT_C_COMMAND
+ # - $FZF_ALT_C_OPTS
+ 
+@@ -44,11 +45,17 @@ __fzf_cd__() {
+   dir=$(eval "$cmd" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_ALT_C_OPTS" $(__fzfcmd) +m) && printf 'cd %q' "$dir"
+ }
+ 
++__fzf_get_history__() {
++  builtin fc -lnr -2147483648 |
++    last_hist=$(HISTTIMEFORMAT='' builtin history 1) perl -n -l0 -e 'BEGIN { getc; $/ = "\n\t"; $HISTCMD = $ENV{last_hist} + 1 } s/^[ *]//; print $HISTCMD - $. . "\t$_" if !$seen{$_}++'
++
++}
++
+ __fzf_history__() {
+   local output
++  cmd=${FZF_CTRL_R_COMMAND:-'__fzf_get_history__'}
+   output=$(
+-    builtin fc -lnr -2147483648 |
+-      last_hist=$(HISTTIMEFORMAT='' builtin history 1) perl -n -l0 -e 'BEGIN { getc; $/ = "\n\t"; $HISTCMD = $ENV{last_hist} + 1 } s/^[ *]//; print $HISTCMD - $. . "\t$_" if !$seen{$_}++' |
++    $cmd |
+       FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS +m --read0" $(__fzfcmd) --query "$READLINE_LINE"
+   ) || return
+   READLINE_LINE=${output#*$'\t'}

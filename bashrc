@@ -208,32 +208,95 @@ alias which_cat=fn_which_cat
 
 alias go_home_hg_you_are_drunk='hg reset -C && hg revert --all && hg clean --all && hg purge && hg up --clean .'
 
-source ~/.fzf.bash
-__fzf_select_from_tmux_pane ()
-{
-        builtin typeset READLINE_LINE_NEW="$(
-                command tmux capture-pane -Jp -S -100  \
-                | command sed 's/\s/\n/g' \
-                | sort \
-                | uniq \
-                | env fzf -m
-        )"
-
-        if
-                [[ -n $READLINE_LINE_NEW ]]
-        then
-                builtin bind '"\er": redraw-current-line'
-                builtin bind '"\e^": magic-space'
-                READLINE_LINE=${READLINE_LINE:+${READLINE_LINE:0:READLINE_POINT}}${READLINE_LINE_NEW}${READLINE_LINE:+${READLINE_LINE:READLINE_POINT}}
-                READLINE_POINT=$(( READLINE_POINT + ${#READLINE_LINE_NEW} ))
-        else
-                builtin bind '"\er":'
-                builtin bind '"\e^":'
-        fi
+function preview_bat {
+  file="$1"
+  c=${2:-100000}
+  language=$(echo "$file" | sed -e 's/^.*[.]\([^.]*\)/\1/')
+  head -c "$c" "$file" \
+  | bat \
+    --color always \
+    --language "$language"
 }
 
-builtin bind -x '"\C-x1": __fzf_select_from_tmux_pane'
-builtin bind '"\C-]": "\C-x1\e^\er"'
+export -f preview_bat
+
+function __superhistory_for_fzf__ {
+  cat <(~/.local/bin/superhistory_parser "$HISTORY_TOKEN" "$(pwd)" ~/.bash_superhistory)
+}
+
+export -f __superhistory_for_fzf__
+
+function fcommit {
+  git log \
+    --oneline \
+    --decorate \
+    --color=always \
+  | fzf \
+    --multi \
+    --no-sort \
+    --nth=2..-1 \
+    --ansi \
+    --preview-window=left:70%:wrap \
+    --preview 'git show {+1} | bat --color always --language diff' \
+  | cut -f 1 -d ' '
+}
+
+export -f fcommit
+
+function fbranch {
+  git branch \
+  | sed -e 's/^..//' \
+  | fzf \
+    --preview-window=left:70%:wrap \
+    --preview='git log --decorate --oneline $(git merge-base {} master)..{} --color=always ; git diff --color=always $(git merge-base {} master)..{} '
+}
+
+export -f fbranch
+
+__fzf_select_from_tmux_pane ()
+{
+  builtin typeset READLINE_LINE_NEW="$(
+    command tmux capture-pane -Jp -S -100  \
+    | grep -v 'Last command took' \
+    | grep -v '^Feature:' \
+    | grep -v "^$USER@" \
+    | command sed 's/\s/\n/g' \
+    | grep -v '^\s*$' \
+    | grep '^.......' \
+    | env fzf -m --tac --height 30%
+  )"
+
+  #  | sort \
+  #  | uniq \
+  if
+    [[ -n $READLINE_LINE_NEW ]]
+  then
+    builtin bind '"\er": redraw-current-line'
+    builtin bind '"\e^": magic-space'
+    READLINE_LINE=${READLINE_LINE:+${READLINE_LINE:0:READLINE_POINT}}${READLINE_LINE_NEW}${READLINE_LINE:+${READLINE_LINE:READLINE_POINT}}
+    READLINE_POINT=$(( READLINE_POINT + ${#READLINE_LINE_NEW} ))
+  else
+    builtin bind '"\er":'
+    builtin bind '"\e^":'
+  fi
+}
+
+export -f __fzf_select_from_tmux_pane
+
+source ~/.fzf.bash
+export FZF_CTRL_T_OPTS='--preview="if [ -d {} ] ; then ls -la --color=always {} ; else preview_bat {} 100000 ; fi" --preview-window=right:70%:wrap'
+export FZF_CTRL_R_OPTS='--tac'
+export FZF_CTRL_R_COMMAND='__superhistory_for_fzf__'
+
+bind -m emacs-standard -x '"\C-y": fcommit'
+bind -m vi-command -x '"\C-y": fcommit'
+bind -m vi-insert -x '"\C-y": fcommit'
+bind -m emacs-standard -x '"\C-b": fbranch'
+bind -m vi-command -x '"\C-b": fbranch'
+bind -m vi-insert -x '"\C-b": fbranch'
+bind -m emacs-standard -x '"\C-f": __fzf_select_from_tmux_pane'
+bind -m vi-command -x '"\C-f": __fzf_select_from_tmux_pane'
+bind -m vi-insert -x '"\C-f": __fzf_select_from_tmux_pane'
 
 trap 'pre_command' DEBUG
 

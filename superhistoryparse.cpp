@@ -123,7 +123,7 @@ int main(int argc, char* argv[]) {
             o1.push_back(cmd);
         } else {
             fwrite_unlocked(cmd.str, 1, cmd.len, stdout);
-            putc_unlocked('\n', stdout);
+            putc_unlocked(0, stdout);
         }
 
     }
@@ -131,13 +131,13 @@ int main(int argc, char* argv[]) {
     for (unsigned int j=0;j<o1s;j++) {
         auto &cmd = o1[j];
         fwrite_unlocked(cmd.str, 1, cmd.len, stdout);
-        putc_unlocked('\n', stdout);
+        putc_unlocked(0, stdout);
     }
     auto o2s = o2.size();
     for (unsigned int j=0;j<o2s;j++) {
         auto &cmd = o2[j];
         fwrite_unlocked(cmd.str, 1, cmd.len, stdout);
-        putc_unlocked('\n', stdout);
+        putc_unlocked(0, stdout);
     }
     return 0;
 }
