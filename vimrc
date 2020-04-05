@@ -474,7 +474,9 @@ Plugin 'hashivim/vim-terraform'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 
-let g:ctrlp_cmd = 'CtrlPMixed'
+let g:terraform_align=1
+
+let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_working_path_mode = 'rc'
 
 let g:LookOfDisapprovalTabTreshold=5
