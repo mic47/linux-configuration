@@ -72,10 +72,6 @@ proml
 alias ssh='ssh -XC $*'
 alias ssh="ssh -XC"
 
-alias such='git'
-alias very='git'
-alias wow='git tree'
-
 alias astyle='astyle -t --indent-classes --pad-oper --pad-paren-out'
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
@@ -93,27 +89,6 @@ alias l='ls -CF'
 
 alias vless='vim -u /usr/share/vim/vim72/macros/less.vim'
 
-# Compbio aliases
-alias bibus='ssh -XC panda.compbio.fmph.uniba.sk bibus'
-alias admingrid='clusterssh `for i in cpu02 cpu03 cpu04 cpu05 cpu06 cpu07 ; do echo bifadm@$i.compbio.fmph.uniba.sk; done`'
-alias cpu01='ssh -t cpu01 "cd `pwd` && bash"'
-# '"echo \"cd `pwd`\"| /bin/bash"'
-alias cpu02='ssh -t cpu02 "cd `pwd` && bash"'
-alias cpu03='ssh -t cpu03 "cd `pwd` && bash"'
-alias cpu04='ssh -t cpu04 "cd `pwd` && bash"'
-alias cpu05='ssh -t cpu05 "cd `pwd` && bash"'
-alias cpu06='ssh -t cpu06 "cd `pwd` && bash"'
-alias cpu07='ssh -t cpu07 "cd `pwd` && bash"'
-
-alias eqstat="qstat -f -u '*' -F memory,threads"
-
-#ulimit -u 1000
-
-if [ "`uname -n`" == "compbio" ]; then
-	ulimit -m 2097152
-fi
-
-alias logtail="pypy bin/logTailer.py output"
 alias kill_zombies='sudo kill -HUP $(ps -A -ostat,ppid | grep -e "[zZ]"| awk "{ print \$2 }")'
 set -o vi
 
@@ -299,60 +274,6 @@ bind -m vi-command -x '"\C-f": __fzf_select_from_tmux_pane'
 bind -m vi-insert -x '"\C-f": __fzf_select_from_tmux_pane'
 
 trap 'pre_command' DEBUG
-
-function mega_grep {
-  grep \
-    -rn \
-    --exclude-dir=.git \
-    --exclude-dir=target \
-    --exclude=*.class \
-    --exclude-dir='$global' \
-    --exclude-dir='target' \
-    --exclude-dir='.idea' \
-    --exclude-dir='.ensime_cache' \
-    --exclude='*.swp' \
-    --exclude='*.swo' \
-    --exclude='.generated.ctags' \
-    "$@"
-}
-
-function code_mega_grep {
-  mega_grep \
-    --exclude '*.xml' \
-    --exclude '*.json' \
-    --exclude '*.config' \
-    --exclude '*.csv' \
-    --exclude '*.txt' \
-    --exclude '*.log' \
-    --exclude '*.ipynb' \
-    "$@"
-}
-
-function mega_grep_browser {
-  xxx=$(tempfile)
-  mega_grep \
-    --color=always \
-    "$@" \
-    | head -n 2000 \
-    | ansi2html > $xxx.html
-  xdg-open $xxx.html
-}
-
-function code_mega_grep_browser {
-  xxx=$(tempfile)
-  code_mega_grep \
-    --color=always \
-    "$@" \
-    | head -n 2000 \
-    | ansi2html > $xxx.html
-  xdg-open $xxx.html
-}
-
-function pip_mega {
- for p in python python3; do 
-   $p -m pip install "$@" ; 
- done
-}
 
 alias pcat='pandoc -t markdown $1'
 alias occurences='sort | uniq -c | sort -n'
