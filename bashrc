@@ -44,31 +44,8 @@ export FZF_CTRL_R_COMMAND='__superhistory_for_fzf__'
 
 # ====== Prompt visual hints ==
 
-declare __timer
-declare __timer2
-
-function pre_command {
-       export __timer2=$__timer
-       export __timer=$(date +%s)
-}
-
-function post_command {
-    local __wuut=$__timer2
-    local __delta=$(($(date +%s) - $__wuut))
-    local alert=''
-    if [[ $__delta -ge 60 ]]; then
-        alert=$'\a';
-        $(send_alert)
-    fi
-    echo $__delta$alert
-}
-
-function future_command {
-    head -n 1 ~/.future
-}
-
 function proml {
-PS1="\[\033[1;33m\][\$(date)] Last command took \$(post_command) second(s)\[\033[1;0m\]\$(parse_git_branch)\n\$(future_command)\n$PS1"
+  PS1="\[\033[1;33m\][\$(date)] Last command took \$(post_command) second(s)\[\033[1;0m\]\$(parse_git_branch)\n\$(future_command)\n$PS1"
 }
 proml
 
@@ -156,12 +133,6 @@ sizeup () {
   >&2 echo -ne $'\r\E[K\e[0m'
   echo -e "$output"| sort -t '*' ${reverse}-nk 2 | cut -d '*' -f 1,3 | column -s '*' -t
   echo $'\e[1;33;40m'"Total: "$'\e[1;32;40m'"$(__sizeup_humanize $totalb)"$'\e[1;33;40m'" in $counter files"$'\e[0m'
-}
-
-function next_command {
-    eval `future_command`
-    cat ~/.future | tac | head -n -1 | tac > /tmp/.future
-    cp /tmp/.future ~/.future
 }
 
 alias vimall='nvim `hg status --rev .^ -a -m -n`'

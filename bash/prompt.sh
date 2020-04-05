@@ -57,3 +57,36 @@ function send_alert {
   echo -n "$full_cmd" > /tmp/last_command.$$
 }
 
+declare __timer
+declare __timer2
+
+function pre_command {
+       export __timer2=$__timer
+       export __timer=$(date +%s)
+}
+
+export -f pre_command
+
+function post_command {
+    local __wuut=$__timer2
+    local __delta=$(($(date +%s) - $__wuut))
+    local alert=''
+    if [[ $__delta -ge 60 ]]; then
+        alert=$'\a';
+        $(send_alert)
+    fi
+    echo $__delta$alert
+}
+
+export -f post_command
+
+function future_command {
+    head -n 1 ~/.future
+}
+
+function next_command {
+    eval `future_command`
+    cat ~/.future | tac | head -n -1 | tac > /tmp/.future
+    cp /tmp/.future ~/.future
+}
+
