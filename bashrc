@@ -184,7 +184,7 @@ function next_command {
 }
 
 alias vimall='nvim `hg status --rev .^ -a -m -n`'
-alias vimgall='nvim `git diff -r HEAD^1 | grep "+++ b" | sed -e "s/+++ b.//"`'
+alias vimgall='nvim `git diff --relative -r $(git merge-base HEAD master) | grep "+++ b" | sed -e "s/+++ b.//"`'
 
 alias cp='cp --backup=numbered'
 alias ln='ln --backup=numbered'
