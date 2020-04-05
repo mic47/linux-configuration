@@ -1,5 +1,11 @@
 #!/bin/bash
 
+function __superhistory_for_fzf__ {
+  cat <(~/.local/bin/superhistory_parser "$HISTORY_TOKEN" "$(pwd)" ~/.bash_superhistory)
+}
+
+export -f __superhistory_for_fzf__
+
 hcmnt() {
     # adds comments to bash history entries (or logs them)
 
