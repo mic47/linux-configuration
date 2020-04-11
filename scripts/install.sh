@@ -4,6 +4,7 @@ base=`pwd`
 
 mkdir -p ~/.vim/bundle
 mkdir -p ~/.local/bin
+g++ -W -Wall -O3 superhistoryparse.cpp -o ~/.local/bin/superhistory_parser
 ln -s $base/biggrep_parse.py ~/.local/bin/biggrep_parse.py
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 echo source $base/bashrc >> ~/.bashrc
