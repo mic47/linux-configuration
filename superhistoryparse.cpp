@@ -81,18 +81,47 @@ inline bool skip_over_column_and_check_for_token_at_the_and_and_found_end_of_str
 
 char* end_of_input;
 
+const size_t HASHTABLE_SIZE = 1024*1024*8 / 32;
+const unsigned int MODULUS = 8388593;
+const unsigned int MULT = 199;
+
+inline unsigned int hash_char(unsigned int state, unsigned int c) {
+  return (state * MULT + c) % MODULUS;
+}
+unsigned int mem[HASHTABLE_SIZE];
+inline unsigned int lookup(unsigned int hash) {
+  return (mem[(hash)>>5]&(1<<((hash)&31)));
+}
+inline void set(unsigned int hash) {
+  mem[(hash)>>5] |= 1 << ((hash)&31);
+}
+
+typedef struct {
+  char*str;
+  size_t len;
+  unsigned int hsh;
+} my_string;
+
+inline unsigned int hash_str(const my_string &str) {
+  unsigned int state = 0;
+  for (unsigned int i=0;i<str.len; i++) {
+    state = hash_char(state, str.str[i]);
+  }
+  return state;
+}
+
+
+
 int main(int argc, char* argv[]) {
     if (argc < 4) {
       fprintf(stderr, "Not enough arguments\n");
       return 1;
     }
-    typedef struct {
-      char*str;
-      size_t len;
-    } my_string;
+    vector<my_string> out;
     vector<my_string> o1, o2;
     o1.reserve(1024);
     o2.reserve(1024);
+    out.reserve(200000);
     my_string cmd;
 
     struct stat st;
@@ -113,8 +142,10 @@ int main(int argc, char* argv[]) {
         if (skip_over_column_and_found_end_of_string(input_line)) continue;
         if (skip_over_column_and_check_for_directory_and_found_end_of_string(argv[2], input_line, found_directory)) continue;
         cmd.str = input_line;
-        while(input_line < end_of_input && *input_line != '\n') ++input_line;
+        unsigned int hsh = 0;
+        while(input_line < end_of_input && *input_line != '\n') {hsh = hash_char(hsh, *input_line);++input_line;}
         cmd.len = input_line - cmd.str;
+        cmd.hsh = hsh;
         input_line += 1;
 
         if (found_token) {
@@ -122,22 +153,26 @@ int main(int argc, char* argv[]) {
         } else if (found_directory) {
             o1.push_back(cmd);
         } else {
-            fwrite_unlocked(cmd.str, 1, cmd.len, stdout);
-            putc_unlocked(0, stdout);
+            out.push_back(cmd);
         }
 
     }
     auto o1s = o1.size();
     for (unsigned int j=0;j<o1s;j++) {
-        auto &cmd = o1[j];
-        fwrite_unlocked(cmd.str, 1, cmd.len, stdout);
-        putc_unlocked(0, stdout);
+        out.push_back(o1[j]);
     }
     auto o2s = o2.size();
     for (unsigned int j=0;j<o2s;j++) {
-        auto &cmd = o2[j];
+        out.push_back(o2[j]);
+    }
+    for (int j = out.size()-1; j >= 0; --j) {
+      auto &cmd = out[j];
+      if (lookup(cmd.hsh) == 0) {
+        set(cmd.hsh);
         fwrite_unlocked(cmd.str, 1, cmd.len, stdout);
         putc_unlocked(0, stdout);
+      }
+
     }
     return 0;
 }

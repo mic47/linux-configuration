@@ -39,7 +39,7 @@ export hcmntextra='date "+%Y-%m-%d %R"'      # you must be really careful to get
 export PROMPT_COMMAND='hcmnt -eityl ~/.bash_superhistory $LOGNAME@$HOSTNAME '$HISTORY_TOKEN
 
 # Make FZF to use new history
-export FZF_CTRL_R_OPTS='--tac'
+export FZF_CTRL_R_OPTS=''
 export FZF_CTRL_R_COMMAND='__superhistory_for_fzf__'
 
 # ====== Prompt visual hints ==
