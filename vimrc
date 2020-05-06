@@ -520,14 +520,16 @@ if exists('$TMUX')
   nnoremap <silent> <C-j> :call TmuxOrSplitSwitch('wincmd j', 'select-pane -D')<cr>
   nnoremap <silent> <C-k> :call TmuxOrSplitSwitch('wincmd k', 'select-pane -U')<cr>
   nnoremap <silent> <C-l> :call TmuxOrSplitSwitch('wincmd l', 'select-pane -R')<cr>
-  nnoremap <silent> <C-i> :call TmuxOrSplitSwitch("execute ':tabnext ' . (tabpagenr() +1)", 'select-window -n')<cr>
+  " Due to the long standing design bug in vim, C-i is same thing as Tab, so
+  " it is not a good idea to remap it.
+  " nnoremap <silent> <C-i> :call TmuxOrSplitSwitch("execute ':tabnext ' . (tabpagenr() +1)", 'select-window -n')<cr>
   nnoremap <silent> <C-u> :call TmuxOrSplitSwitch("execute ':tabnext ' . (tabpagenr() -1)", 'select-window -p')<cr>
 else
   map <C-h> <C-w>h
   map <C-j> <C-w>j
   map <C-k> <C-w>k
   map <C-l> <C-w>l
-  map <C-i> :tabnext<cr>
+  "map <C-i> :tabnext<cr>
   map <C-u> :tabprev<cr>
 endif 
 
