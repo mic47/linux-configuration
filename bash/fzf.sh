@@ -83,3 +83,12 @@ bind -m vi-insert -x '"\C-b": fbranch'
 bind -m emacs-standard -x '"\C-f": __fzf_select_from_tmux_pane'
 bind -m vi-command -x '"\C-f": __fzf_select_from_tmux_pane'
 bind -m vi-insert -x '"\C-f": __fzf_select_from_tmux_pane'
+
+fzgrep() {
+  grep --color=always $* \
+    | fzf \
+      --ansi \
+      --preview='bat --color=always $(echo {} | sed -e "s/:.*//" )' \
+      --preview-window=bottom
+}
+export -f fzgrep
