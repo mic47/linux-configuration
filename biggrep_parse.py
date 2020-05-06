@@ -9,7 +9,7 @@ import math
 
 
 def prepare_scorings(what_escaped):
-    prefix_words = ["class", "function", "def", "interface", "data", "newtype", "trait", "type"]
+    prefix_words = ["class", "function", "def", "interface", "data", "newtype", "trait", "type", "const", "object"]
     scorings = [
         (re.compile(template.format(what=what_escaped)), score)
         for template, score in itertools.chain(
