@@ -342,6 +342,13 @@ endfunction
 
 " }}}
 
+let g:ale_fixers = {
+  \ 'javascript': ['eslint'],
+  \ 'typescript': ['eslint'],
+  \ 'typescriptreact': ['eslint'],
+  \ 'python': ['mypy', 'pylint']
+  \ }
+
 function! MEDIAWIKISET()
   set background=light
   syntax on
@@ -443,6 +450,7 @@ Plugin 'dodie/vim-disapprove-deep-indentation'
 Plugin 'stevearc/vim-arduino'
 "Plugin 'derekwyatt/vim-scala'  " maybe conflicts with ensime-vim
 Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-markdown'
 Plugin 'airblade/vim-gitgutter'
 "Plugin 'ensime/ensime-vim'
 Plugin 'majutsushi/tagbar'
@@ -453,6 +461,7 @@ Plugin 'w0rp/ale'
 Plugin 'ambv/black'
 Plugin 'integralist/vim-mypy'
 Plugin 'hashivim/vim-terraform'
+Plugin 'vim-python/python-syntax'
 "Plugin 'showmarks'
 " let g:ycm_filetype_specific_completion_to_disable = {}
 " The following are examples of different formats supported.
@@ -643,3 +652,9 @@ set grepprg=array2=();mapfile\ -t\ array2\ <\ <(git\ ls-files);grep\ -n\ --binar
 set formatprg=par\ w110
 set nowrap
 set formatoptions-=t
+
+let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'haskell', 'scala', 'javascript', 'sql', 'json']
+let g:markdown_syntax_conceal = 0
+let g:vim_json_conceal=0
+
+let g:python_highlight_all = 1
