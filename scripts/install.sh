@@ -27,6 +27,9 @@ sudo apt update
 sudo apt install python3-dev python3-pip python3-setuptools
 sudo pip3 install thefuck
 
+npm install eslint
+npm install prettier eslint-plugin-prettier
+npm install eslint-config-prettier
 
 echo Go to ~/vim/bundle/YouCompleteMe and install it you want probably all, maybe not go.
 echo You should also install https://github.com/luben/sctags !!!
