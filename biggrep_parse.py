@@ -9,7 +9,18 @@ import math
 
 
 def prepare_scorings(what_escaped):
-    prefix_words = ["class", "function", "def", "interface", "data", "newtype", "trait", "type", "const", "object"]
+    prefix_words = [
+        "class",
+        "function",
+        "def",
+        "interface",
+        "data",
+        "newtype",
+        "trait",
+        "type",
+        "const",
+        "object",
+    ]
     scorings = [
         (re.compile(template.format(what=what_escaped)), score)
         for template, score in itertools.chain(
@@ -27,6 +38,9 @@ def prepare_scorings(what_escaped):
                 # Haskell function declarations
                 ("\\b{what} ::", 300000),
                 ("{what} ::", 3000),
+                ("@given[(]['\"].*{what}", 300000),
+                ("@then[(]['\"].*{what}", 300000),
+                ("@when[(]['\"].*{what}", 300000),
             ],
         )
     ]
@@ -60,14 +74,14 @@ def process_input(input_stream, scorings, scorings_exact):
 
 def filename_to_multiplier(filename):
     # Put most relevant tests to the end
-    if filename.count("__tests__") > 0:
+    if filename.count("__tests__") + filename.count(".test.") + filename.count("test_data") > 0:
         return -10000
     if filename.split("/")[-1].startswith("test_"):
         return -10000
     # Put irrelevant generated files to the middle
-    if re.search('doc/.*svg$', filename) is not None:
+    if re.search("doc/.*svg$", filename) is not None:
         return -1
-    if re.search('doc/.*svg.dot$', filename) is not None:
+    if re.search("doc/.*svg.dot$", filename) is not None:
         return -1
     return 1
 
