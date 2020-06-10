@@ -68,23 +68,37 @@ highlight Search ctermbg=darkgray ctermfg=white
 "map <tab> <ctrl-ww>
 "map <s-tab> <c>w
 
-function! GoogleUnderCursor()
-	let s:man = "firefox www.google.sk/search?q="
-	let s:wordundercursor = expand("<cword>")
-	let s:cmd = "!". s:man . s:wordundercursor." >/dev/null 2>/dev/null &"
-	execute s:cmd
-endfunction
-
 function! GrepUnderCursor()
   let s:wordundercursor = expand("<cword>")
   let s:cmd = "grep " . s:wordundercursor
   execute s:cmd
 endfunction
 
-map <C-G> :call GoogleUnderCursor()<cr><cr>
-imap <C-G> <esc>:call GoogleUnderCursor()<cr><cr>i
+func! GetSelectedText()
+  normal gv"xy
+  let result = getreg("x")
+  normal gv
+  return result
+endfunc
+
+function! GrepSelection(selection)
+  echom a:selection
+  echo a:selection
+  execute "grep '" . a:selection . "'"
+endfunction
+
+function! GithubSelection() range
+  let s:base_cmd = "echo $(git remote get-url --push origin | sed -e 's/:/\\//;s/^git@/https:\\/\\//;s/[.]git$/\\/tree/')/$(git rev-parse HEAD)/$(realpath --relative-to=\"$(git rev-parse --show-toplevel)\" $(pwd))/"
+  let s:cmd = "!firefox $(" . s:base_cmd . @% . "\\#L" . a:firstline . "-L" . a:lastline . ")"
+  execute s:cmd
+endfunc
+
+map <C-G> :call GithubSelection()<cr><cr>
+imap <C-G> <esc>:call GithubSelection()<cr><cr>i
+vmap <C-G> :call GithubSelection()<cr><cr><esc>
 map <C-F> :call GrepUnderCursor()<cr><cr>
 imap <C-F> <esc>:call GrepUnderCursor<cr><cr>i
+vmap <C-F> :call GrepSelection(GetSelectedText())<cr><cr><esc>
 " TODO: google in visual mode
 
 " hi LineNr term=reverse ctermbg=blue guibg=blue
@@ -457,6 +471,7 @@ Plugin 'ambv/black'
 Plugin 'integralist/vim-mypy'
 Plugin 'hashivim/vim-terraform'
 Plugin 'vim-python/python-syntax'
+Plugin 'leafgarland/typescript-vim'
 "Plugin 'showmarks'
 " let g:ycm_filetype_specific_completion_to_disable = {}
 " The following are examples of different formats supported.
@@ -650,3 +665,11 @@ let g:markdown_syntax_conceal = 0
 let g:vim_json_conceal=0
 
 let g:python_highlight_all = 1
+
+let g:ycm_python_interpreter_path = ''
+let g:ycm_python_sys_path = []
+let g:ycm_extra_conf_vim_data = [
+  \  'g:ycm_python_interpreter_path',
+  \  'g:ycm_python_sys_path'
+  \]
+let g:ycm_global_ycm_extra_conf = '~/.global_extra_conf.py'
