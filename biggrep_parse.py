@@ -12,6 +12,7 @@ def prepare_scorings(what_escaped):
     prefix_words = [
         "class",
         "function",
+        "message",
         "def",
         "interface",
         "data",
@@ -35,6 +36,11 @@ def prepare_scorings(what_escaped):
                 ("{what}", 1.0),
                 ("^{what}$", 30000),
                 ("\\b{what}\\b", 300),
+                # declarations
+                ("\\b{what}\s+:", 3000),
+                ("{what}\s+:", 300),
+                ("\\b{what}\s+=", 3000),
+                ("{what}\s+=", 300),
                 # Haskell function declarations
                 ("\\b{what} ::", 300000),
                 ("{what} ::", 3000),
@@ -45,6 +51,18 @@ def prepare_scorings(what_escaped):
         )
     ]
     return scorings
+
+def safe_stdin():
+    for line in sys.stdin.buffer.read().split(b"\n"):
+        try:
+            r = line.decode("utf8") + "\n"
+            yield r
+        except:
+            try:
+                r = (b":".join(line.split(b":")[:2]) + b": Matched but invalid utf8 bytes\n").decode('utf8')
+                yield r
+            except:
+                pass
 
 
 def process_input(input_stream, scorings, scorings_exact):
@@ -78,6 +96,14 @@ def filename_to_multiplier(filename):
         return -10000
     if filename.split("/")[-1].startswith("test_"):
         return -10000
+    if filename.count("_pb2.pyi") > 0:
+        return -30000
+    if filename.count("_pb2.py") > 0:
+        return -20000
+    if filename.endswith(".class"):
+        return -20000
+    if filename.count("/target/"):
+        return -20000
     # Put irrelevant generated files to the middle
     if re.search("doc/.*svg$", filename) is not None:
         return -1
@@ -101,7 +127,7 @@ def main():
     what = sys.argv[1]
     scorings_exact = prepare_scorings(re.escape(what))
     scorings = prepare_scorings(re.escape(what.lower()))
-    d, score = process_input(sys.stdin, scorings, scorings_exact)
+    d, score = process_input(safe_stdin(), scorings, scorings_exact)
     print_sorted(d, score)
 
 
