@@ -68,15 +68,6 @@ function! GrepSelection(selection)
   execute "grep '" . a:selection . "'"
 endfunction
 
-function! GithubSelection() range
-  let s:base_cmd = "echo $(git remote get-url --push origin | sed -e 's/:/\\//;s/^git@/https:\\/\\//;s/[.]git$/\\/tree/')/$(git rev-parse HEAD)/$(realpath --relative-to=\"$(git rev-parse --show-toplevel)\" $(pwd))/"
-  let s:cmd = "!firefox $(" . s:base_cmd . @% . "\\#L" . a:firstline . "-L" . a:lastline . ")"
-  execute s:cmd
-endfunc
-
-map <C-G> :call GithubSelection()<cr><cr>
-imap <C-G> <esc>:call GithubSelection()<cr><cr>i
-vmap <C-G> :call GithubSelection()<cr><cr><esc>
 map <C-F> :call GrepUnderCursor()<cr><cr>
 imap <C-F> <esc>:call GrepUnderCursor<cr><cr>i
 vmap <C-F> :call GrepSelection(GetSelectedText())<cr><cr><esc>
@@ -382,6 +373,11 @@ call vundle#begin()
 
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
+
+" My own plugins
+Plugin 'mic47/platypus-vim-code-browse'
+" External plugins
+
 Plugin 'mhinz/vim-signify'
 Plugin 'mbbill/undotree'
 Plugin 'scrooloose/nerdtree'
@@ -394,7 +390,6 @@ Plugin 'vito-c/jq.vim'
 Plugin 'ryanoasis/vim-webdevicons'
 Plugin 'bling/vim-airline'
 Plugin 'phleet/vim-arcanist'
-"Plugin 'scrooloose/syntastic'
 Plugin 'dodie/vim-disapprove-deep-indentation'
 Plugin 'stevearc/vim-arduino'
 Plugin 'derekwyatt/vim-scala'  " maybe conflicts with ensime-vim
@@ -431,6 +426,10 @@ Plugin 'leafgarland/typescript-vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
+
+"C-G to open code selection in browser"
+map <silent> <C-G> <Plug>(code_browse_shortcut)
+
 
 let g:terraform_align=1
 
