@@ -86,7 +86,7 @@ alias mv='mv -f --backup=numbered'
 alias turbo_mode="ps -x -o %mem,pid,command=CMD |grep --color=always 'Google Chrome Helper' | sed -e 's/^ *//;s/  */ /g' | sort -n | tail -n 10  | cut -f 2 -d ' ' | xargs -n 1 kill"
 
 function getip {
-  getent hosts "$1" | sed -e "s/ .*//" 
+  getent hosts "$1" | sed -e "s/ .*//"
 }
 
 which_vim() {
@@ -108,3 +108,11 @@ alias jq_less='jq . --color-output | less -R'
 
 alias display_internal_lowres_external_highres='xrandr --output eDP-1 --scale 2x2 && xrandr --output HDMI-2 --panning 3840x2160+3840+0'
 export PATH=~/.local/bin:$PATH
+
+function clear_docker() {
+  docker image rm $( \
+    docker image ls \
+    | sort \
+    | awk 'BEGIN{prev_1="";} {if (prev_1 == $1) {if ($1 == "<none>") {printf("%s\n", $3);} else {printf("%s:%s\n",prev_1,prev_2);};} ; prev_1=$1; prev_2=$2; }' \
+  )
+}
