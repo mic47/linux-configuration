@@ -49,29 +49,6 @@ set laststatus=2
 " Search is more subtle
 highlight Search ctermbg=darkgray ctermfg=white
 
-function! GrepUnderCursor()
-  let s:wordundercursor = expand("<cword>")
-  let s:cmd = "grep " . s:wordundercursor
-  execute s:cmd
-endfunction
-
-func! GetSelectedText()
-  normal gv"xy
-  let result = getreg("x")
-  normal gv
-  return result
-endfunc
-
-function! GrepSelection(selection)
-  echom a:selection
-  echo a:selection
-  execute "grep '" . a:selection . "'"
-endfunction
-
-map <C-F> :call GrepUnderCursor()<cr><cr>
-imap <C-F> <esc>:call GrepUnderCursor<cr><cr>i
-vmap <C-F> :call GrepSelection(GetSelectedText())<cr><cr><esc>
-
 set synmaxcol=2048
 
 nnoremap + <C-a>
@@ -362,6 +339,8 @@ augroup myvimrc
     au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc so $MYVIMRC | if has('gui_running') | so $MYGVIMRC | endif
 augroup END
 
+let g:vundle_default_git_proto = 'git'
+""" BEGIN OF VUNDLE
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
@@ -426,9 +405,13 @@ Plugin 'leafgarland/typescript-vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
+filetype plugin indent on    " required
+""" BEGIN OF VUNDLE
 
+let g:code_browse_browser_cmd="firefox"
 "C-G to open code selection in browser"
-map <silent> <C-G> <Plug>(code_browse_shortcut)
+map <silent> <C-G> <Plug>(code_browse_browser)
+map <silent> <C-F> <Plug>(code_browse_grep)
 
 
 let g:terraform_align=1
@@ -441,7 +424,6 @@ let g:LookOfDisapprovalSpaceTreshold=(&tabstop*5)
 
 let g:signify_sign_overwrite = 0
 
-filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
 "filetype plugin on
 "
