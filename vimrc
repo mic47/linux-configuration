@@ -6,7 +6,7 @@
 set timeout
 set timeoutlen=200
 
-command! Converttohtml so $vimruntime/syntax/2html.vim
+command! ConvertToHTML so $VIMRUNTIME/syntax/2html.vim
 
 set autoread
 map <tab> :bnext<CR>
@@ -41,32 +41,13 @@ set hlsearch
 set display+=lastline
 set display+=uhex
 
-let g:VimSplitBalancerSupress=1
-
 if !has('nvim')
   set ttymouse=sgr
 endif
 
-"set statusline=%<%f\ %h%m%r%=char=%b=0x%B\ \ %l,%c,%v\ %p%%
 set laststatus=2
-"set highlight+=s:mystatuslinehighlight
-"highlight mystatuslinehighlight ctermbg=blue ctermfg=white
-"au InsertEnter * hi mystatuslinehighlight ctermbg=green ctermfg=white
-"au InsertLeave * hi mystatuslinehighlight ctermbg=blue ctermfg=white
 " Search is more subtle
 highlight Search ctermbg=darkgray ctermfg=white
-
-"nnoremap // :noh<cr>
-"function! My_tab_completion()
-"    if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
-"        return "\<c-n>"
-"    else
-"        return "\<tab>"
-"endfunction
-"inoremap <tab> <c-r>=My_tab_completion()<cr>
-"
-"map <tab> <ctrl-ww>
-"map <s-tab> <c>w
 
 function! GrepUnderCursor()
   let s:wordundercursor = expand("<cword>")
@@ -99,30 +80,8 @@ vmap <C-G> :call GithubSelection()<cr><cr><esc>
 map <C-F> :call GrepUnderCursor()<cr><cr>
 imap <C-F> <esc>:call GrepUnderCursor<cr><cr>i
 vmap <C-F> :call GrepSelection(GetSelectedText())<cr><cr><esc>
-" TODO: google in visual mode
-
-" hi LineNr term=reverse ctermbg=blue guibg=blue
-"au InsertEnter * hi LineNr term=reverse ctermbg=green guibg=green
-"au InsertLeave * hi LineNr term=reverse ctermbg=blue    guibg=blue
 
 set synmaxcol=2048
-
-" highlight ColorColumn ctermbg=blue guibg=blue
-" if exists('+colorcolumn')
-"   set colorcolumn=80,120
-" else
-"   au BufWinEnter * let w:m2=matchadd('ColorColumn', '\%>80v.\+', -1)
-" endif
-
-" Turn off arrow key
-"nnoremap <up> <nop>
-"nnoremap <down> <nop>
-"nnoremap <left> <nop>
-"nnoremap <right> <nop>
-"nnoremap <up> <nop>
-"inoremap <down> <nop>
-"inoremap <left> <nop>
-"inoremap <right> <nop>
 
 nnoremap + <C-a>
 nnoremap - <C-x>
@@ -347,7 +306,8 @@ function! PYTHONSET()
   set softtabstop=4
   set shiftwidth=4
   set nospell
-  let b:ale_linters = ['mypy', 'pylint']
+  " let b:ale_linters = ['mypy', 'pylint']
+  setlocal foldmethod=indent
 endfunction
 
 " }}}
@@ -390,16 +350,6 @@ autocmd FileType pmwiki      call PMWIKISET()
 set nocp
 filetype plugin on 
 map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
-" let OmniCpp_NamespaceSearch = 2
-" let OmniCpp_DisplayMode = 0
-" let OmniCpp_ShowScopeInAbbr = 1
-" let OmniCpp_ShowPrototypeInAbbr = 1
-" let OmniCpp_ShowAccess = 1
-" let OmniCpp_MayCompleteDot = 1
-" let OmniCpp_MayCompleteArrow = 1
-" let OmniCpp_MayCompleteScope = 0
-" let OmniCpp_SelectFirstItem = 0
-" set tags+=~/.stl.tag
 
 " }}}
 " ======================================================================================================
@@ -407,16 +357,6 @@ map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 
 " }}}
 " =======================================================================
-
-"set fdm=marker
-"set commentstring=%s
-"set foldmarker={,}
-
-" a na zaver povieme vimku, nech posklada foldy do seba
-"" vim: fdm=marker:commentstring=\ \"\ %s 
-
-" autocmd FileType python compiler pylint
-
 
 inoremap <F2> <C-R>=ListNotes()<CR>
 inoremap <F3> <C-R>=ListNotes()<CR>
@@ -451,7 +391,6 @@ Plugin 'eagletmt/ghcmod-vim'
 Plugin 'Shougo/vimproc.vim'
 Plugin 'vito-c/jq.vim'
 " Plugin 'YouCompleteMe', {'pinned': 1}
-"Bundle 'jordwalke/VimSplitBalancer'
 Plugin 'ryanoasis/vim-webdevicons'
 Plugin 'bling/vim-airline'
 Plugin 'phleet/vim-arcanist'
@@ -673,3 +612,4 @@ let g:ycm_extra_conf_vim_data = [
   \  'g:ycm_python_sys_path'
   \]
 let g:ycm_global_ycm_extra_conf = '~/.global_extra_conf.py'
+let g:ycm_autoclose_preview_window_after_completion=1
