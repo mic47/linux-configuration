@@ -9,6 +9,8 @@ import itertools
 
 from typing import Iterable, Dict, List, Tuple, Pattern, NewType
 
+REPLACEMENT = "xxx⚓xxx"
+
 
 def prepare_scorings(what_escaped: str) -> List[Tuple[Pattern, float]]:
     prefix_words = [
@@ -76,6 +78,8 @@ def safe_stdin() -> Iterable[Line]:
 
 
 COLORS_RE = re.compile(r"\x1b\[[0-9;]*[mK]")
+COLORS_K_RE = re.compile(r"\x1b\[[0-9;]*K")
+HIGHLIGHT_RE = re.compile(r"\x1b\[01;31m[^\x1b]*\x1b\[m")
 
 
 def process_input(
@@ -88,7 +92,7 @@ def process_input(
         try:
             file_, row, line = inp.split(":", 2)
             file = FileName(file_)
-            haystack = COLORS_RE.sub("", line.strip())
+            haystack = COLORS_RE.sub("", HIGHLIGHT_RE.sub(REPLACEMENT, COLORS_K_RE.sub("", line.strip())))
             haystack_lower = haystack.lower()
             line_score = 0.0
             if file not in score:
@@ -99,13 +103,11 @@ def process_input(
             for regex, regex_score in scorings_exact:
                 if regex.search(haystack) is not None:
                     line_score += regex_score * 10
-            # TODO: make scoring to match ranges from grep matches
             d[file].append((Row(row), Line(line), LineScore(line_score)))
             score[file] = FileScore(score[file] + line_score)
         except Exception as e:
             print(inp, file=sys.stderr)
             print(e, file=sys.stderr)
-            pass
     return d, score
 
 
@@ -140,12 +142,14 @@ def pp_line(
         semicolon = "\033[96m:"
         score = "\033[33m" + score
         l_score = "\033[33m" + l_score
+        postprocess = lambda x: x
     else:
         semicolon = ":"
+        postprocess = lambda x: COLORS_RE.sub("", x)
     if explain:
-        sys.stdout.write(semicolon.join([file, line, score, l_score, text]))
+        sys.stdout.write(postprocess(semicolon.join([file, line, score, l_score, text])))
     else:
-        sys.stdout.write(semicolon.join([file, line, text]))
+        sys.stdout.write(postprocess(semicolon.join([file, line, text])))
 
 
 def print_sorted(
@@ -198,24 +202,20 @@ def get_what(args: argparse.Namespace) -> str:
     return " ".join(args.what)
 
 
-def grep(color: bool, *args: str) -> Iterable[Line]:
-    out = subprocess.run(
-        ["grep", "--color={}".format("always" if color else "never")] + list(args),
-        stdout=subprocess.PIPE,
-        check=False,
-    )
-    for x in out.stdout.decode("utf8").strip("\n").split("\n"):
-        if x:
-            yield Line(f"{x}\n")
+def grep(*args: str) -> Iterable[Line]:
+    out = subprocess.run(["grep", "--color=always"] + list(args), stdout=subprocess.PIPE, check=False)
+    for line in out.stdout.decode("utf8").strip("\n").split("\n"):
+        if line:
+            yield Line(f"{line}\n")
 
 
 def git_ls_files(directory: str) -> Iterable[str]:
     out = subprocess.run(
         ["git", "ls-files"], cwd=directory, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
-    for x in out.stdout.decode("utf8").strip("\n").split("\n"):
-        if x:
-            yield f"{directory}/{x}"
+    for file in out.stdout.decode("utf8").strip("\n").split("\n"):
+        if file:
+            yield f"{directory}/{file}"
 
 
 def get_source(args: argparse.Namespace) -> Iterable[Line]:
@@ -226,24 +226,23 @@ def get_source(args: argparse.Namespace) -> Iterable[Line]:
     elif args.input == "auto":
         try:
             files = list(git_ls_files(args.dir))
-            yield from grep(args.color, "-n", *extensions, what, *files)
+            yield from grep("-n", *extensions, what, *files)
         except subprocess.CalledProcessError:
-            yield from grep(args.color, "-rn", *extensions, what, args.dir)
+            yield from grep("-rn", *extensions, what, args.dir)
     elif args.input == "git":
-        yield from grep(args.color, "-n", *extensions, what, *git_ls_files(args.dir))
+        yield from grep("-n", *extensions, what, *git_ls_files(args.dir))
     elif args.input == "recursive":
-        yield from grep(args.color, "-rn", *extensions, what, args.dir)
+        yield from grep("-rn", *extensions, what, args.dir)
     elif args.input == "extension":
-        yield from grep(args.color, "-rn", *extensions, what, args.dir)
+        yield from grep("-rn", *extensions, what, args.dir)
     else:
         raise NotImplementedError(f"Command {args.command} is not implemented")
 
 
 def main() -> None:
     args = parse_args()
-    what = get_what(args)
-    scorings_exact = prepare_scorings(re.escape(what))
-    scorings = prepare_scorings(re.escape(what.lower()))
+    scorings_exact = prepare_scorings(REPLACEMENT)
+    scorings = prepare_scorings(REPLACEMENT)
     d, score = process_input(get_source(args), scorings, scorings_exact)
     print_sorted(d, score, sort_type=args.sort, explain=args.explain, color=args.color)
 
