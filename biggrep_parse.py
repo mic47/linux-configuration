@@ -233,8 +233,6 @@ def get_source(args: argparse.Namespace) -> Iterable[Line]:
         yield from grep("-n", *extensions, what, *git_ls_files(args.dir))
     elif args.input == "recursive":
         yield from grep("-rn", *extensions, what, args.dir)
-    elif args.input == "extension":
-        yield from grep("-rn", *extensions, what, args.dir)
     else:
         raise NotImplementedError(f"Command {args.command} is not implemented")
 
