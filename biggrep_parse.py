@@ -220,7 +220,7 @@ def git_ls_files(directory: str) -> Iterable[str]:
 
 def get_source(args: argparse.Namespace) -> Iterable[Line]:
     what = get_what(args)
-    extensions = [f"--include=*.{ext}" for ext in args.extensions.split(",")]
+    extensions = [f"--include=*.{ext}" for ext in args.extensions.split(",")] if args.extensions else []
     if args.input == "stdin":
         yield from safe_stdin()
     elif args.input == "auto":
