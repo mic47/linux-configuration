@@ -18,7 +18,7 @@ LAST_KNOW_CONFIGURATION="last_configuration.txt"
 
 LAST_CONF=$(cat "$LAST_KNOW_CONFIGURATION" | tr -d '\n')
 
-if [ "$LAST_CONF" == "$MONITORS" ] ; then
+if [[ "$LAST_CONF" == "$MONITORS" && "$1" != "startup" ]] ; then
   echo "Last configuration is same as before, not updating"
   exit 0
 fi
