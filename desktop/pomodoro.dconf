@@ -1,0 +1,32 @@
+[plugins/actions]
+actions-list=['/org/gnome/pomodoro/plugins/actions/action0/', '/org/gnome/pomodoro/plugins/actions/action1/']
+
+[plugins/actions/action0]
+command="$HOME/.local/bin/pomodoro-question.sh '$(state)' '$(duration)' '$(elapsed)' '$(triggers)'"
+name='Ask if successfull'
+states=['pomodoro']
+triggers=['complete', 'skip', 'disable']
+
+[plugins/actions/action1]
+command='$HOME/.local/bin/pomodoro-resume.sh'
+name='Resume after pause ends'
+states=['short-break', 'long-break']
+triggers=['complete', 'skip']
+
+[plugins/gnome]
+hide-system-notifications=false
+
+[plugins/sounds]
+pomodoro-end-sound='bell.ogg'
+pomodoro-end-sound-volume=1.0
+pomodoro-start-sound='loud-bell.ogg'
+pomodoro-start-sound-volume=1.0
+ticking-sound=''
+ticking-sound-volume=0.38762214983713356
+
+[preferences]
+enabled-plugins=['sounds', 'dark-theme', 'actions']
+long-break-duration=60.0
+long-break-interval=4.0
+pomodoro-duration=1740.0
+short-break-duration=60.0

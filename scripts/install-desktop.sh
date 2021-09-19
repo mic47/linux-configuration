@@ -60,7 +60,8 @@ sudo apt-get install \
 	xdg-desktop-portal-gtk \
 	xdotool \
 	xkbset \
-	xss-lock
+	xss-lock \
+  zenity
 
 ln -s "$(pwd)/desktop/screenlayout" ~/.screenlayout
 mkdir -p ~/.config/i3
@@ -76,3 +77,15 @@ ln -s "$(pwd)/desktop/albert/python_plugins" ~/.local/share/albert/org.albert.ex
 mkdir -p ~/.config/albert
 rm ~/.config/albert/albert.conf
 ln -s "$(pwd)/desktop/albert/albert.conf" ~/.config/albert/albert.conf
+
+mkdir ~/.logs
+cat desktop/pomodoro.dconf | envsubst | dconf load /org/gnome/pomodoro/
+ln -s "$(pwd)/desktop/pomodoro-question.sh" ~/.local/bin/pomodoro-question.sh
+ln -s "$(pwd)/desktop/pomodoro-resume.sh" ~/.local/bin/pomodoro-resume.sh
+mkdir -p github
+pushd github
+git clone https://github.com/kantord/i3-gnome-pomodoro
+sudo pip install -r i3-gnome-pomodoro/requirements.txt
+sed -e 's/env python/python/' -i i3-gnome-pomodoro/pomodoro-client.py
+ln -s "$(pwd)/i3-gnome-pomodoro/pomodoro-client.py" ~/.local/bin/pomodoro-client
+popd
