@@ -3,6 +3,20 @@
 "
 
 " ======================= GENERAL SECTION ====================================
+
+" TODO extract into plugins:
+" 1. [x] Redirect to github platypus-vim-code-browse
+" 2. [x] Search platypus-vim-grep
+" 3. tmux / terminal platypus-vim-tmux-integration
+" 4. itemrm2 integration platypus-vim-iterm2
+" 5. latex / other old stff -- platypus-vim-historic
+" 6. my general UI -- platypus-vim-ui
+" TODO, format:
+" 1. General config
+" 2. Plugins
+" 3. Plugin customization
+" 4. Filetype mappings
+
 set timeout
 set timeoutlen=200
 
@@ -286,6 +300,9 @@ let g:ale_fixers = {
   \ 'typescriptreact': ['eslint'],
   \ 'python': ['mypy', 'pylint']
   \ }
+let g:ale_linters = {
+  \ 'python': ['mypy', 'pylint']
+  \ }
 
 function! MEDIAWIKISET()
   set background=light
@@ -357,10 +374,12 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'mic47/platypus-vim-code-browse'
 " External plugins
 
+Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
+Plugin 'voldikss/vim-floaterm'
 Plugin 'mhinz/vim-signify'
 Plugin 'mbbill/undotree'
 Plugin 'scrooloose/nerdtree'
-Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'eagletmt/ghcmod-vim'
 Plugin 'Shougo/vimproc.vim'
@@ -368,7 +387,6 @@ Plugin 'vito-c/jq.vim'
 " Plugin 'YouCompleteMe', {'pinned': 1}
 Plugin 'ryanoasis/vim-webdevicons'
 Plugin 'bling/vim-airline'
-Plugin 'phleet/vim-arcanist'
 Plugin 'dodie/vim-disapprove-deep-indentation'
 Plugin 'stevearc/vim-arduino'
 Plugin 'derekwyatt/vim-scala'  " maybe conflicts with ensime-vim
@@ -381,7 +399,6 @@ Plugin 'bam9523/vim-decompile'
 Bundle 'https://github.com/prashanthellina/follow-markdown-links'
 Plugin 'w0rp/ale'
 Plugin 'ambv/black'
-Plugin 'integralist/vim-mypy'
 Plugin 'hashivim/vim-terraform'
 Plugin 'vim-python/python-syntax'
 Plugin 'leafgarland/typescript-vim'
@@ -411,13 +428,14 @@ filetype plugin indent on    " required
 let g:code_browse_browser_cmd="firefox"
 "C-G to open code selection in browser"
 map <silent> <C-G> <Plug>(code_browse_browser)
+map <silent> <Leader>g <Plug>(code_browse_browser)
 map <silent> <C-F> <Plug>(code_browse_grep)
 
+map <C-P> :GFiles<CR>
+imap <C-P> <ESC>:GFiles<CR>i
 
 let g:terraform_align=1
 
-let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_working_path_mode = 'rc'
 
 let g:LookOfDisapprovalTabTreshold=5
 let g:LookOfDisapprovalSpaceTreshold=(&tabstop*5)
@@ -566,16 +584,11 @@ endif
 
 set tags=.generated.sctags;.generated.ctags;/
 
-let g:ctrlp_custom_ignore = '/target/'
-if has('nvim')
-  autocmd BufWritePost *.scala :EnTypeCheck
-endif
-
 noremap <Up> <nop>
 noremap <Down> <nop>
 noremap <Left> <nop>
 noremap <Right> <nop>
-set grepprg=array2=();mapfile\ -t\ array2\ <\ <(git\ ls-files);grep\ -n\ --binary-files=text\ $*\ \"${array2[@]}\"\ /dev/null\ \\\|biggrep_parse.py\ $*
+set grepprg=crep
 set formatprg=par\ w110
 set nowrap
 set formatoptions-=t
@@ -594,3 +607,8 @@ let g:ycm_extra_conf_vim_data = [
   \]
 let g:ycm_global_ycm_extra_conf = '~/.global_extra_conf.py'
 let g:ycm_autoclose_preview_window_after_completion=1
+
+inoremap <expr> <C-e> fzf#vim#complete(fzf#wrap({
+  \ 'source':  'python /home/mic/Code/Personal/platypus-desk-todo/parse-emoji.py',
+  \ 'options': '--header "Emoji Selection" --no-hscroll --delimiter : --nth 2',
+  \ 'reducer': { lines -> join(split(lines[0], ':')[:1], '') }}))
