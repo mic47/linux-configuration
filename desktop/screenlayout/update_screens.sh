@@ -14,9 +14,7 @@ MONITORS=$(xrandr \
   | create_screen_representation
 )
 
-BASEDIR=$(dirname "$0")
-
-LAST_KNOW_CONFIGURATION="$BASEDIR/last_configuration.txt"
+LAST_KNOW_CONFIGURATION="last_configuration.txt"
 
 LAST_CONF=$(cat "$LAST_KNOW_CONFIGURATION" | tr -d '\n')
 
@@ -36,9 +34,7 @@ for i in *sh ; do
     | create_screen_representation
   )
   if [ "$MONITORS" == "$CURRENT" ] ; then
-    pushd "$(dirname "$0")" || exit
     ./"$i"
-    popd || exit
     exit 0
   fi;
 done
