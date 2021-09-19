@@ -14,6 +14,7 @@ sudo apt-get install \
 	i3status \
 	inotify-tools \
 	lm-sensors \
+  parallel \
 	pavucontrol \
 	pulseaudio-equalizer \
 	spotify-client \
@@ -26,3 +27,5 @@ sudo apt-get install \
 	xdotool \
 	xkbset \
 	xss-lock
+
+ln -s "$(pwd)/desktop/screenlayout" ~/.screenlayout
