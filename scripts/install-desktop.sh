@@ -11,11 +11,11 @@ set -ex
 # [x] i3configuration
 # [x] i3status configuraton
 # [x] i3status binaries
-# [ ] albert
-# [ ] albert configuration
-# [ ] albert plugins
-# [ ] /home/mic/Pictures/i3wm_reference.png
-# [ ] /home/mic/Pictures/macros/kubernetes_guide.png
+# [x] albert
+# [x] albert configuration
+# [x] albert plugins
+# [x] /home/mic/Pictures/i3wm_reference.png
+# [x] /home/mic/Pictures/macros/kubernetes_guide.png
 # [ ] ~/.local/bin/i3status-custom.sh
 # [ ] /home/mic/.local/bin/terminalNotes.sh
 
@@ -65,6 +65,7 @@ sudo apt-get install \
 ln -s "$(pwd)/desktop/screenlayout" ~/.screenlayout
 mkdir -p ~/.config/i3
 ln -s "$(pwd)/desktop/i3.config" ~/.config/i3/config
+ln -s "$(pwd)/desktop/i3images" ~/.config/i3/images
 mkdir -p ~/.local/bin
 ln -s "$(pwd)/desktop/i3status-custom.sh" ~/.local/bin/i3status-custom.sh
 mkdir -p ~/.config/i3status
