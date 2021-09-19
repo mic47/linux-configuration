@@ -50,6 +50,7 @@ sudo apt-get install \
 	pavucontrol \
 	pulseaudio-equalizer \
   pulseaudio-utils \
+  python3-pip \
 	spotify-client \
 	xautolock \
 	xbindkeys \
@@ -81,10 +82,13 @@ mkdir ~/.logs
 cat desktop/pomodoro.dconf | envsubst | dconf load /org/gnome/pomodoro/
 ln -s "$(pwd)/desktop/pomodoro-question.sh" ~/.local/bin/pomodoro-question.sh
 ln -s "$(pwd)/desktop/pomodoro-resume.sh" ~/.local/bin/pomodoro-resume.sh
+ln -s "$(pwd)/desktop/pomodoro_counter.sh" ~/.local/bin/pomodoro_counter.sh
+ln -s "$(pwd)/desktop/pomodoro-manual.sh" ~/.local/bin/pomodoro-manual.sh
+ln -s "$(pwd)/desktop/pomodoro-switch.sh" ~/.local/bin/pomodoro-switch.sh
 mkdir -p github
 pushd github
 git clone https://github.com/kantord/i3-gnome-pomodoro
-sudo pip install -r i3-gnome-pomodoro/requirements.txt
+sudo pip3 install -r i3-gnome-pomodoro/requirements.txt
 sed -e 's/env python/python/' -i i3-gnome-pomodoro/pomodoro-client.py
 ln -s "$(pwd)/i3-gnome-pomodoro/pomodoro-client.py" ~/.local/bin/pomodoro-client
 popd

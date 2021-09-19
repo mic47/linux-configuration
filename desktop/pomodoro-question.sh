@@ -86,7 +86,7 @@ question() {
     --add-list "Type of work" \
     --list-values "Focus work|Meeting|Overhead|Learning" \
     --add-combo "Billable to" \
-    --combo-values "$(cat /home/mic/.billable_companies | tr '\n' '|')None" \
+    --combo-values "$(cat "$HOME"/.billable_companies | tr '\n' '|')None" \
     --add-entry "Why failed?" \
     --text "" \
     --separator "$(echo -e '\t')"
@@ -95,7 +95,7 @@ question() {
 (
   form_output=$( question || question || question )
 
-  echo -e "${NOW_TIMESTAMP}\t${NOW}\t$ELAPSED\t$form_output" >> /home/mic/.logs/pomodoro.csv
-  env > /home/mic/.logs/pomodoro.env
-  echo "$*" > /home/mic/.logs/pomodoro.args
+  echo -e "${NOW_TIMESTAMP}\t${NOW}\t$ELAPSED\t$form_output" >> "$HOME"/.logs/pomodoro.csv
+  env > "$HOME"/.logs/pomodoro.env
+  echo "$*" > "$HOME"/.logs/pomodoro.args
 ) &
