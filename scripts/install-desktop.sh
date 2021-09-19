@@ -89,7 +89,9 @@ ln -s "$(pwd)/desktop/pomodoro-switch.sh" ~/.local/bin/pomodoro-switch.sh
 mkdir -p github
 pushd github
 git clone https://github.com/kantord/i3-gnome-pomodoro
-sudo pip3 install -r <(cat i3-gnome-pomodoro/requirements.txt | sed -e 's/==.*//')
+reqs=$(mktemp)
+cat i3-gnome-pomodoro/requirements.txt | sed -e 's/==.*//' > $reqs
+sudo pip3 install -r $reqs
 sed -e 's/env python/python/' -i i3-gnome-pomodoro/pomodoro-client.py
 ln -s "$(pwd)/i3-gnome-pomodoro/pomodoro-client.py" ~/.local/bin/pomodoro-client
 popd
