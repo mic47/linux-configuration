@@ -7,15 +7,10 @@ try:
 except ImportError:
     pass
 from math import *
-from builtins import pow
 import http.client
 from urllib.parse import quote
 import json
 import copy
-try:
-    import numpy as np
-except ImportError:
-    pass
 import os
 
 __iid__ = "PythonInterface/v0.1"
