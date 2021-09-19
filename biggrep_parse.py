@@ -18,9 +18,7 @@ from typing import Iterable, Dict, List, Tuple, Pattern, NewType
 
 REPLACEMENT = "xxx⚓xxx"
 
-WHITESPACE=r"\s+"
-
-def prepare_scorings(what_escaped: str) -> List[Tuple[Pattern, float]]:
+def prepare_scorings(what: str) -> List[Tuple[Pattern, float]]:
     prefix_words = [
         "class",
         "function",
@@ -35,30 +33,30 @@ def prepare_scorings(what_escaped: str) -> List[Tuple[Pattern, float]]:
         "object",
     ]
     scorings = [
-        (re.compile(template.format(what=what_escaped)), score)
+        (re.compile(template), score)
         for template, score in itertools.chain(
             itertools.chain.from_iterable(
                 [
-                    [(prefix + " {what}\\b", 300000), (prefix + " {what}", 3000), (prefix, 10)]
+                    [(rf"{prefix}\s+{what}\b", 300000), (rf"{prefix}\s+{what}", 3000), (prefix, 10)]
                     for prefix in prefix_words
                 ]
             ),
             [
                 # plain occurences
-                ("{what}", 1.0),
-                ("^{what}$", 30000),
-                ("\\b{what}\\b", 300),
+                (rf"{what}", 1.0),
+                (rf"^{what}$", 30000),
+                (rf"\b{what}\b", 300),
                 # declarations
-                ("\\b{what}\\s+:", 3000),
-                ("{what}\\s+:", 300),
-                ("\\b{what}\\s+=", 3000),
-                ("{what}\\s+=", 300),
+                (rf"\b{what}\s+:", 3000),
+                (rf"{what}\s+:", 300),
+                (rf"\b{what}\s+=", 3000),
+                (rf"{what}\s+=", 300),
                 # Haskell function declarations
-                ("\\b{what} ::", 300000),
-                ("{what} ::", 3000),
-                ("@given[(]['\"].*{what}", 300000),
-                ("@then[(]['\"].*{what}", 300000),
-                ("@when[(]['\"].*{what}", 300000),
+                (rf"\b{what}\s+::", 300000),
+                (rf"{what}\s+::", 3000),
+                (rf"@given[(]['\"].*{what}", 300000),
+                (rf"@then[(]['\"].*{what}", 300000),
+                (rf"@when[(]['\"].*{what}", 300000),
             ],
         )
     ]
