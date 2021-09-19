@@ -110,9 +110,23 @@ alias display_internal_lowres_external_highres='xrandr --output eDP-1 --scale 2x
 export PATH=~/.local/bin:$PATH
 
 function clear_docker() {
+  docker system prune
+  docker image prune
   docker image rm $( \
     docker image ls \
     | sort \
     | awk 'BEGIN{prev_1="";} {if (prev_1 == $1) {if ($1 == "<none>") {printf("%s\n", $3);} else {printf("%s:%s\n",prev_1,prev_2);};} ; prev_1=$1; prev_2=$2; }' \
   )
+}
+
+clear_branches() {
+  # Delete all remote branches.
+  limit=${1:-1000}
+  (for status in closed merged ; do
+     hub pr list -s "$status" -f "%I|%S|%H|%au%n"  -L "$limit" ;
+   done) \
+     | sort -u \
+     | cut -d '|' -f 3 \
+     | grep -v '^master$' \
+     | parallel git branch -D {}
 }
