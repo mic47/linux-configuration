@@ -6,7 +6,7 @@ install_custom_deb_package_from_github() {
   git clone "$repo" "$directory"
   pushd "$directory" || exit 1
   git pull
-  make install
+  make install-local
   popd || exit 1
 }
 
