@@ -1,5 +1,5 @@
 """
-`cgrep foo` will find all occurences of foo in the current directory, and rank them by relevancy. If it's a
+`crep foo` will find all occurences of foo in the current directory, and rank them by relevancy. If it's a
 git repository, it will narrow search to only files that are tracked in that repo. By default it return most
 relevant file on the top, and matched lines are ordered as in the input file. Regexp syntax is as in grep
 (it calls grep underneath). Note that if you provide several patterns, they will be joined to single patter
