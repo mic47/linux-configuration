@@ -64,35 +64,39 @@ sudo apt-get install \
 	xss-lock \
   zenity
 
-ln -s "$(pwd)/desktop/screenlayout" ~/.screenlayout
-mkdir -p ~/.config/i3
-ln -s "$(pwd)/desktop/i3.config" ~/.config/i3/config
-ln -s "$(pwd)/desktop/i3images" ~/.config/i3/images
-mkdir -p ~/.local/bin
-ln -s "$(pwd)/desktop/i3status-custom.sh" ~/.local/bin/i3status-custom.sh
-mkdir -p ~/.config/i3status
-ln -s "$(pwd)/desktop/i3status.config" ~/.config/i3status/config
-rm -rf ~/.local/share/albert/org.albert.extension.python/modules
-mkdir -p ~/.local/share/albert/org.albert.extension.python
-ln -s "$(pwd)/desktop/albert/python_plugins" ~/.local/share/albert/org.albert.extension.python/modules
-mkdir -p ~/.config/albert
-rm -f ~/.config/albert/albert.conf
-ln -s "$(pwd)/desktop/albert/albert.conf" ~/.config/albert/albert.conf
+replace_with_symlink() {
+  mkdir -p "$(dirname "$2")"
+  rm -rf "$2"
+  replace_with_symlink "$1" "$2"
+}
 
-mkdir ~/.logs
+replace_with_symlink desktop/screenlayout ~/.screenlayout
+mkdir -p ~/.config/i3
+replace_with_symlink desktop/i3.config ~/.config/i3/config
+replace_with_symlink desktop/i3images ~/.config/i3/images
+mkdir -p ~/.local/bin
+replace_with_symlink desktop/i3status-custom.sh ~/.local/bin/i3status-custom.sh
+mkdir -p ~/.config/i3status
+replace_with_symlink desktop/i3status.config ~/.config/i3status/config
+mkdir -p ~/.local/share/albert/org.albert.extension.python
+replace_with_symlink desktop/albert/python_plugins ~/.local/share/albert/org.albert.extension.python/modules
+mkdir -p ~/.config/albert
+replace_with_symlink desktop/albert/albert.conf ~/.config/albert/albert.conf
+
+mkdir -p ~/.logs
 cat desktop/pomodoro.dconf | envsubst | dconf load /org/gnome/pomodoro/
-ln -s "$(pwd)/desktop/pomodoro-question.sh" ~/.local/bin/pomodoro-question.sh
-ln -s "$(pwd)/desktop/pomodoro-resume.sh" ~/.local/bin/pomodoro-resume.sh
-ln -s "$(pwd)/desktop/pomodoro_counter.sh" ~/.local/bin/pomodoro_counter.sh
-ln -s "$(pwd)/desktop/pomodoro-manual.sh" ~/.local/bin/pomodoro-manual.sh
-ln -s "$(pwd)/desktop/pomodoro-switch.sh" ~/.local/bin/pomodoro-switch.sh
+replace_with_symlink desktop/pomodoro-question.sh ~/.local/bin/pomodoro-question.sh
+replace_with_symlink desktop/pomodoro-resume.sh ~/.local/bin/pomodoro-resume.sh
+replace_with_symlink desktop/pomodoro_counter.sh ~/.local/bin/pomodoro_counter.sh
+replace_with_symlink desktop/pomodoro-manual.sh ~/.local/bin/pomodoro-manual.sh
+replace_with_symlink desktop/pomodoro-switch.sh ~/.local/bin/pomodoro-switch.sh
 mkdir -p github
 pushd github
 git clone https://github.com/kantord/i3-gnome-pomodoro
 reqs=$(mktemp)
-cat i3-gnome-pomodoro/requirements.txt | sed -e 's/==.*//' > $reqs
-sudo pip3 install -r $reqs
+cat i3-gnome-pomodoro/requirements.txt | sed -e 's/==.*//' > "$reqs"
+sudo pip3 install -r "$reqs"
 sed -e 's/env python/python/' -i i3-gnome-pomodoro/pomodoro-client.py
-ln -s "$(pwd)/i3-gnome-pomodoro/pomodoro-client.py" ~/.local/bin/pomodoro-client
+replace_with_symlink "i3-gnome-pomodoro/pomodoro-client.py" ~/.local/bin/pomodoro-client
 popd
 desktop/desktop_files/install.sh
