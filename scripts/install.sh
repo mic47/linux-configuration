@@ -1,11 +1,21 @@
 #!/bin/bash
 
+install_custom_deb_package_from_github() {
+  repo=$1
+  directory=$2
+  git clone "$repo" "$directory"
+  pushd "$directory" || exit 1
+  git pull
+  make install
+  popd || exit 1
+}
+
 base=`pwd`
 
 mkdir -p ~/.vim/bundle
 mkdir -p ~/.local/bin
 g++ -W -Wall -O3 superhistoryparse.cpp -o ~/.local/bin/superhistory_parser
-ln -s $base/biggrep_parse.py ~/.local/bin/biggrep_parse.py
+ln -s $base/crep.py ~/.local/bin/crep
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 echo source $base/bashrc >> ~/.bashrc
 echo source $base/vimrc >> ~/.vimrc
@@ -24,12 +34,15 @@ git apply fzf.patch
 rm fzf.patch
 popd
 sudo apt update
-sudo apt install python3-dev python3-pip python3-setuptools
+sudo apt install python3-dev python3-pip python3-setuptools urlview
 sudo pip3 install thefuck
 
 npm install eslint
 npm install prettier eslint-plugin-prettier
 npm install eslint-config-prettier
+
+mkdir -p "github"
+install_custom_deb_package_from_github git@github.com:mic47/git-tools.git github/git-tools
 
 echo Go to ~/vim/bundle/YouCompleteMe and install it you want probably all, maybe not go.
 echo You should also install https://github.com/luben/sctags !!!
