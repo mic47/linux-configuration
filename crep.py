@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """
 `crep foo` will find all occurences of foo in the current directory, and rank them by relevancy. If it's a
 git repository, it will narrow search to only files that are tracked in that repo. By default it return most
@@ -5,7 +6,6 @@ relevant file on the top, and matched lines are ordered as in the input file. Re
 (it calls grep underneath). Note that if you provide several patterns, they will be joined to single patter
 sepatated by single space.
 """
-#!/usr/bin/python3
 
 import argparse
 from collections import defaultdict
@@ -17,6 +17,7 @@ import textwrap
 from typing import Iterable, Dict, List, Tuple, Pattern, NewType
 
 REPLACEMENT = "xxx⚓xxx"
+
 
 def prepare_scorings(what: str) -> List[Tuple[Pattern, float]]:
     prefix_words = [
@@ -72,6 +73,8 @@ LineScore = NewType("LineScore", float)
 
 def safe_stdin() -> Iterable[Line]:
     for line in sys.stdin.buffer.read().split(b"\n"):
+        if not line:
+            continue
         try:
             r = line.decode("utf8") + "\n"
             yield Line(r)
@@ -112,8 +115,8 @@ def process_input(
             d[file].append((Row(row), Line(line), LineScore(line_score)))
             score[file] = FileScore(score[file] + line_score)
         except Exception as e:
-            print(inp, file=sys.stderr)
-            print(e, file=sys.stderr)
+            print("X", inp, "X", file=sys.stderr)
+            print("Y", e, file=sys.stderr)
     return d, score
 
 
@@ -186,10 +189,7 @@ def print_sorted(
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        "cgrep",
-        description=__doc__,
-    )
+    parser = argparse.ArgumentParser("cgrep", description=__doc__)
     parser.add_argument(
         "--sort",
         default="file",
@@ -203,7 +203,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--extensions", "-e", help="Comma separated list of extensions.")
     parser.add_argument("--input", default="auto", choices=["stdin", "recursive", "git", "auto"])
     parser.add_argument("--color", default="auto", choices=["always", "never", "auto"])
-    parser.add_argument("pattern", nargs="*")
+    parser.add_argument("pattern", nargs="+")
     args = parser.parse_args()
     if args.color == "auto":
         args.color = sys.stdout.isatty()
@@ -216,7 +216,9 @@ def parse_args() -> argparse.Namespace:
 
 def grep(*args: str) -> Iterable[Line]:
     """Wrapper for `grep`"""
-    out = subprocess.run(["grep", "--color=always"] + list(args), stdout=subprocess.PIPE, check=False)
+    out = subprocess.run(
+        ["grep", "--binary-files=text", "--color=always"] + list(args), stdout=subprocess.PIPE, check=False
+    )
     for line in out.stdout.decode("utf8").strip("\n").split("\n"):
         if line:
             yield Line(f"{line}\n")
@@ -241,13 +243,13 @@ def get_source(args: argparse.Namespace) -> Iterable[Line]:
     elif args.input == "auto":
         try:
             files = list(git_ls_files(args.dir))
-            yield from grep("-n", *extensions, pattern, *files)
+            yield from grep("-nH", *extensions, pattern, *files)
         except subprocess.CalledProcessError:
-            yield from grep("-rn", *extensions, pattern, args.dir)
+            yield from grep("-rnH", *extensions, pattern, args.dir)
     elif args.input == "git":
-        yield from grep("-n", *extensions, pattern, *git_ls_files(args.dir))
+        yield from grep("-nH", *extensions, pattern, *git_ls_files(args.dir))
     elif args.input == "recursive":
-        yield from grep("-rn", *extensions, pattern, args.dir)
+        yield from grep("-rnH", *extensions, pattern, args.dir)
     else:
         raise NotImplementedError(f"Command {args.command} is not implemented")
 
