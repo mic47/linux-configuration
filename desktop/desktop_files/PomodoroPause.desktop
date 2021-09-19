@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Pomodoro Interrupt
+Comment=pause pomodoro timer
+Exec=/usr/bin/python3 $CONFIG_HOME/github/i3-gnome-pomodoro/pomodoro-client.py pause
+Icon=media-playback-pause
+Terminal=false
+Type=Application
+Categories=Productivity;

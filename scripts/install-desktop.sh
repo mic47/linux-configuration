@@ -4,10 +4,11 @@ set -ex
 
 # TOOD
 # [x] Screenlayout
-# [ ] .desktop files
-# [ ] pomodoro configuration
-# [ ] pomodoro-client
-# [ ] pomodoro-counter
+# [x] .desktop files
+# [x] pomodoro configuration
+# [x] pomodoro-client
+# [x] pomodoro-counter
+# [ ] platypus-timetrack -- separate repo currently
 # [x] i3configuration
 # [x] i3status configuraton
 # [x] i3status binaries
@@ -92,3 +93,4 @@ sudo pip3 install -r <(cat i3-gnome-pomodoro/requirements.txt | sed -e 's/==.*//
 sed -e 's/env python/python/' -i i3-gnome-pomodoro/pomodoro-client.py
 ln -s "$(pwd)/i3-gnome-pomodoro/pomodoro-client.py" ~/.local/bin/pomodoro-client
 popd
+desktop/desktop_files/install.sh

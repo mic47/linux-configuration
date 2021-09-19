@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Pomodoro Resume
+Comment=resume pomodoro timer
+Exec=/usr/bin/python3 $CONFIG_HOME/github/i3-gnome-pomodoro/pomodoro-client.py resume
+Icon=media-playback-start
+Terminal=false
+Type=Application
+Categories=Productivity;

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Pomodoro Skip
+Comment=skip pomodoro timer/break
+Exec=/usr/bin/python3 $CONFIG_HOME/github/i3-gnome-pomodoro/pomodoro-client.py skip
+Icon=view-sort-descending
+Terminal=false
+Type=Application
+Categories=Productivity;

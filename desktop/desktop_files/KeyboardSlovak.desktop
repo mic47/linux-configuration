@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Slovak Keyboard
+Comment=slovak layout
+Exec=setxkbmap sk,us -variant qwerty, -option grp:rctrl_switch
+Icon=view-sort-descending
+Terminal=false
+Type=Application
+Categories=Productivity;

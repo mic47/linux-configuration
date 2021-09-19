@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Layout 3 Screens USB-C and HDMI
+Comment=Set screen layout to 3 screens via USB-C and HDMI
+Exec=$HOME/.screenlayout/home_workstation_3_screens.sh
+Icon=video-display
+Terminal=false
+Type=Application
+Categories=Productivity;

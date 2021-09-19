@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Layout 2 Screens USB-C
+Comment=Set screen layout to 2 screens via USB-C
+Exec=$HOME/.screenlayout/home_workstation.sh
+Icon=video-display
+Terminal=false
+Type=Application
+Categories=Productivity;

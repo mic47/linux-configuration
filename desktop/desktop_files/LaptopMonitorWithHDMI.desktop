@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Layout 2 Screens HDMI
+Comment=Set screen layout to 2 screens via HDMI
+Exec=$HOME/.screenlayout/home_workstation_html_2_screens.sh
+Icon=video-display
+Terminal=false
+Type=Application
+Categories=Productivity;

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Pomodoro Switch Task
+Comment=switch tasks in pomodoro
+Exec=$HOME/.local/bin/pomodoro-switch.sh
+Icon=media-skip-forward
+Terminal=false
+Type=Application
+Categories=Productivity;

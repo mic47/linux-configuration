@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Layout Laptop Monitor Only
+Comment=Set screen layout to laptop monitor only
+Exec=$HOME/.screenlayout/laptop.sh
+Icon=video-display
+Terminal=false
+Type=Application
+Categories=Productivity;

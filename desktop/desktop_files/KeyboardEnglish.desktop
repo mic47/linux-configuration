@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=English Keyboard
+Comment=english layout
+Exec=setxkbmap us,sk -variant ,qwerty -option grp:rctrl_switch
+Icon=view-sort-descending
+Terminal=false
+Type=Application
+Categories=Productivity;
