@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ex
+
 # TOOD
 # [x] Screenlayout
 # [ ] .desktop files
@@ -67,3 +69,9 @@ mkdir -p ~/.local/bin
 ln -s "$(pwd)/desktop/i3status-custom.sh" ~/.local/bin/i3status-custom.sh
 mkdir -p ~/.config/i3status
 ln -s "$(pwd)/desktop/i3status.config" ~/.config/i3status/config
+rm -r ~/.local/share/albert/org.albert.extension.python/modules
+mkdir -p ~/.local/share/albert/org.albert.extension.python
+ln -s "$(pwd)/desktop/albert/python_plugins" ~/.local/share/albert/org.albert.extension.python/modules
+mkdir -p ~/.config/albert
+rm ~/.config/albert/albert.conf
+ln -s "$(pwd)/desktop/albert/albert.conf" ~/.config/albert/albert.conf
