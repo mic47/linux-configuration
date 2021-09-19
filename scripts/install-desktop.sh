@@ -67,7 +67,7 @@ sudo apt-get install \
 replace_with_symlink() {
   mkdir -p "$(dirname "$2")"
   rm -rf "$2"
-  replace_with_symlink "$1" "$2"
+  ln -s "$(pwd)/$1" "$2"
 }
 
 replace_with_symlink desktop/screenlayout ~/.screenlayout
