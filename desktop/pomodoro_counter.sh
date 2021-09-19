@@ -79,7 +79,7 @@ time_left() {
   WIDE_REGEX=$2
   WORKDAY_REGEX=${3:-$2}
 
-  current_pomodoro=$(/usr/bin/python3 ~/install/i3-gnome-pomodoro/pomodoro-client.py status | grep Pomodoro | sed -e 's/^.*\b\([0-9][0-9]*:[0-9]*\)\b.*$/\1/;s/:/*60+/' | bc -l)
+  current_pomodoro=$(pomodoro-client status | grep Pomodoro | sed -e 's/^.*\b\([0-9][0-9]*:[0-9]*\)\b.*$/\1/;s/:/*60+/' | bc -l)
 
   if [ -z "$current_pomodoro" ]; then
     WORKED_TIME=$(( $(worked_time "$SELECTION" "$WIDE_REGEX")  ))
