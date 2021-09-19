@@ -1,16 +1,24 @@
+"""
+`cgrep foo` will find all occurences of foo in the current directory, and rank them by relevancy. If it's a
+git repository, it will narrow search to only files that are tracked in that repo. By default it return most
+relevant file on the top, and matched lines are ordered as in the input file. Regexp syntax is as in grep
+(it calls grep underneath). Note that if you provide several patterns, they will be joined to single patter
+sepatated by single space.
+"""
 #!/usr/bin/python3
 
 import argparse
+from collections import defaultdict
+import itertools
+import re
 import subprocess
 import sys
-from collections import defaultdict
-import re
-import itertools
-
+import textwrap
 from typing import Iterable, Dict, List, Tuple, Pattern, NewType
 
 REPLACEMENT = "xxx⚓xxx"
 
+WHITESPACE=r"\s+"
 
 def prepare_scorings(what_escaped: str) -> List[Tuple[Pattern, float]]:
     prefix_words = [
@@ -180,14 +188,24 @@ def print_sorted(
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--sort", default="file", choices=["none", "file", "line"], help="How to sort lines.")
+    parser = argparse.ArgumentParser(
+        "cgrep",
+        description=__doc__,
+    )
+    parser.add_argument(
+        "--sort",
+        default="file",
+        choices=["none", "file", "line"],
+        help="How to sort lines."
+        " `file` is to sort by file relevancy so all matches from same file are grouped and order by line numer."
+        " `line` orders by line relevancy.",
+    )
     parser.add_argument("--explain", action="store_true", help="Print also score.")
     parser.add_argument("--dir", "-d", default=".", help="Default directory to search in.")
     parser.add_argument("--extensions", "-e", help="Comma separated list of extensions.")
     parser.add_argument("--input", default="auto", choices=["stdin", "recursive", "git", "auto"])
     parser.add_argument("--color", default="auto", choices=["always", "never", "auto"])
-    parser.add_argument("what", nargs="*")
+    parser.add_argument("pattern", nargs="*")
     args = parser.parse_args()
     if args.color == "auto":
         args.color = sys.stdout.isatty()
@@ -198,11 +216,8 @@ def parse_args() -> argparse.Namespace:
     return args
 
 
-def get_what(args: argparse.Namespace) -> str:
-    return " ".join(args.what)
-
-
 def grep(*args: str) -> Iterable[Line]:
+    """Wrapper for `grep`"""
     out = subprocess.run(["grep", "--color=always"] + list(args), stdout=subprocess.PIPE, check=False)
     for line in out.stdout.decode("utf8").strip("\n").split("\n"):
         if line:
@@ -210,6 +225,7 @@ def grep(*args: str) -> Iterable[Line]:
 
 
 def git_ls_files(directory: str) -> Iterable[str]:
+    """Wrapper for `git ls-files`"""
     out = subprocess.run(
         ["git", "ls-files"], cwd=directory, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
@@ -219,20 +235,21 @@ def git_ls_files(directory: str) -> Iterable[str]:
 
 
 def get_source(args: argparse.Namespace) -> Iterable[Line]:
-    what = get_what(args)
+    """Returns search results for ranking and sorting"""
+    pattern = " ".join(args.pattern)
     extensions = [f"--include=*.{ext}" for ext in args.extensions.split(",")] if args.extensions else []
     if args.input == "stdin":
         yield from safe_stdin()
     elif args.input == "auto":
         try:
             files = list(git_ls_files(args.dir))
-            yield from grep("-n", *extensions, what, *files)
+            yield from grep("-n", *extensions, pattern, *files)
         except subprocess.CalledProcessError:
-            yield from grep("-rn", *extensions, what, args.dir)
+            yield from grep("-rn", *extensions, pattern, args.dir)
     elif args.input == "git":
-        yield from grep("-n", *extensions, what, *git_ls_files(args.dir))
+        yield from grep("-n", *extensions, pattern, *git_ls_files(args.dir))
     elif args.input == "recursive":
-        yield from grep("-rn", *extensions, what, args.dir)
+        yield from grep("-rn", *extensions, pattern, args.dir)
     else:
         raise NotImplementedError(f"Command {args.command} is not implemented")
 
