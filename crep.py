@@ -143,7 +143,14 @@ def filename_to_multiplier(filename: FileName) -> int:
 
 
 def pp_line(
-    file: FileName, line: Row, score_f: FileScore, score_l: LineScore, text: Line, explain: bool, color: bool
+    file: FileName,
+    line: Row,
+    score_f: FileScore,
+    score_l: LineScore,
+    text: Line,
+    explain: bool,
+    color: bool,
+    list_files,
 ) -> None:
     score = str(score_f)
     l_score = str(score_l)
@@ -155,7 +162,10 @@ def pp_line(
     else:
         semicolon = ":"
         postprocess = lambda x: COLORS_RE.sub("", x)
-    if explain:
+    if list_files:
+        sys.stdout.write(postprocess(file))
+        sys.stdout.write("\n")
+    elif explain:
         sys.stdout.write(postprocess(semicolon.join([file, line, score, l_score, text])))
     else:
         sys.stdout.write(postprocess(semicolon.join([file, line, text])))
@@ -167,16 +177,24 @@ def print_sorted(
     sort_type: str,
     explain: bool,
     color: bool,
+    list_files: bool,
 ) -> None:
     out = []
     for k, v in d.items():
         file_multiplier = filename_to_multiplier(k)
-        for row, line, line_score in v:
+        for line_num, (row, line, line_score) in enumerate(v):
             out.append(
-                (FileScore(score[k] * file_multiplier), k, row, line, LineScore(line_score * file_multiplier))
+                (
+                    FileScore(score[k] * file_multiplier),
+                    k,
+                    line_num,
+                    row,
+                    line,
+                    LineScore(line_score * file_multiplier),
+                )
             )
     if sort_type == "file":
-        out.sort(reverse=True)
+        out.sort(reverse=True, key=lambda x: (x[0], x[1], -x[2]))
     elif sort_type == "line":
         out.sort(reverse=True, key=lambda x: (x[-1], x[0]))
     elif sort_type == "none":
@@ -184,8 +202,8 @@ def print_sorted(
     else:
         raise NotImplementedError(f"Sort type {sort_type}.")
 
-    for file_score, k, row, line, line_score in out:
-        pp_line(k, row, file_score, line_score, line, explain, color)
+    for file_score, k, line_num, row, line, line_score in out:
+        pp_line(k, row, file_score, line_score, line, explain, color, list_files)
 
 
 def parse_args() -> argparse.Namespace:
@@ -203,6 +221,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--extensions", "-e", help="Comma separated list of extensions.")
     parser.add_argument("--input", default="auto", choices=["stdin", "recursive", "git", "auto"])
     parser.add_argument("--color", default="auto", choices=["always", "never", "auto"])
+    parser.add_argument("--list-files", "-l", action="store_true", help="Only list files")
     parser.add_argument("pattern", nargs="+")
     args = parser.parse_args()
     if args.color == "auto":
@@ -219,7 +238,11 @@ def grep(*args: str) -> Iterable[Line]:
     out = subprocess.run(
         ["grep", "--binary-files=text", "--color=always"] + list(args), stdout=subprocess.PIPE, check=False
     )
-    for line in out.stdout.decode("utf8").strip("\n").split("\n"):
+    for line_raw in out.stdout.strip(b"\n").split(b"\n"):
+        try:
+            line = line_raw.decode("utf8")
+        except UnicodeDecodeError:
+            pass
         if line:
             yield Line(f"{line}\n")
 
@@ -259,7 +282,9 @@ def main() -> None:
     scorings_exact = prepare_scorings(REPLACEMENT)
     scorings = prepare_scorings(REPLACEMENT)
     d, score = process_input(get_source(args), scorings, scorings_exact)
-    print_sorted(d, score, sort_type=args.sort, explain=args.explain, color=args.color)
+    print_sorted(
+        d, score, sort_type=args.sort, explain=args.explain, color=args.color, list_files=args.list_files
+    )
 
 
 if __name__ == "__main__":
