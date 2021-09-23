@@ -236,15 +236,26 @@ def parse_args() -> argparse.Namespace:
 def grep(*args: str) -> Iterable[Line]:
     """Wrapper for `grep`"""
     out = subprocess.run(
-        ["grep", "--binary-files=text", "--color=always"] + list(args), stdout=subprocess.PIPE, check=False
+        ["grep", "--binary-files=text", "--color=always"] + list(args),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
     )
     for line_raw in out.stdout.strip(b"\n").split(b"\n"):
         try:
             line = line_raw.decode("utf8")
+            if line:
+                yield Line(f"{line}\n")
         except UnicodeDecodeError:
             pass
-        if line:
-            yield Line(f"{line}\n")
+    for line_raw in out.stderr.split(b"\n"):
+        try:
+            line = line_raw.decode("utf8")
+        except UnicodeDecodeError:
+            line = str(line_raw)
+        if line and not line.endswith("Is a directory"):
+            print(line, file=sys.stderr)
+
 
 
 def git_ls_files(directory: str) -> Iterable[str]:
