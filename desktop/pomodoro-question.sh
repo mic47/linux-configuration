@@ -42,6 +42,26 @@ JQ_PROGRAM='
 )
 '
 
+PYTHON_PROGRAM='
+import sys
+
+all_todos = []
+with open(sys.argv[2]) as todos:
+  for todo in todos:
+    all_todos.append(todo.strip())
+all_todos_set = set(all_todos)
+emitted_todos = set()
+with open(sys.argv[1]) as order:
+  for todo in order:
+    todo = todo.strip()
+    if todo in all_todos_set:
+      print(todo)
+      emitted_todos.add(todo)
+for todo in all_todos:
+  if todo not in emitted_todos:
+    print(todo)
+'
+
 STATE=$1
 DURATION=$2
 # shellcheck disable=SC2001
@@ -49,6 +69,8 @@ ELAPSED=$(echo "$3" | sed -e 's/[.].*$//')
 TRIGGER=$4
 NOW_TIMESTAMP=${5:-$(date +%s)}
 NOW=$(date "+%y-%m-%d/%H:%M:%S" -d "@$NOW_TIMESTAMP")
+STARTED_TIMESTAMP=$(($NOW_TIMESTAMP - $ELAPSED))
+STARTED=$(date "+%y-%m-%d/%H:%M:%S" -d "@$STARTED_TIMESTAMP")
 
 
 if [ "$((DURATION - 60))" -lt "$ELAPSED" ] ; then
@@ -60,17 +82,61 @@ fi
 WORKSPACE=$(cat ~/.ssh/asana.token | jq .workspace -r)
 ASANA_TOKEN=$(cat ~/.ssh/asana.token | jq .asana_token -r)
 
-COMBO_VALUES=$(
-  tempfile=$(mktemp)
-
-  curl -X GET 'https://app.asana.com/api/1.0/workspaces/'$WORKSPACE'/tasks/search?assignee.any=me&completed_on=null&opt_fields=name,resource_type,completed,completed_at,assignee,projects,subtasks,this.subtasks.name,this.subtasks.assignee,this.subtasks.completed,assignee.name,this.subtasks.assignee.name,parent.gid,parent.name,custom_fields.name,custom_fields.enum_value.name,this.subtasks.custom_fields.name,this.subtasks.custom_fields.enum_value.name,created_at'  -H 'Accept: application/json'   -H 'Authorization: Bearer '$ASANA_TOKEN \
-    | jq "$JQ_PROGRAM"  -r > "$tempfile"
-  (cat "$tempfile" | grep -e '\(Development\|Code Review\)' ; cat "$tempfile" ) \
-    | tr '\t' ' ' \
-    | tr '|' ' ' \
-    | tr '\n' '|' \
-    | sed -e 's/Code Review/📗/g;s/Development/⌚/g;s/In Acceptance/📘/g;s/Inbox/📫/g;s/Backlog/📬/g'
+COMBO_VALUES=$(python \
+  -c "$PYTHON_PROGRAM" \
+  <(
+    cat ~/.logs/pomodoro.csv \
+      | cut -f 6 -d $'\t' \
+      | grep -v '^\s*$' \
+      | sed -e 's/,$//' \
+      | tac \
+      | awk '{if (a[$0] != 1) {print($0); a[$0] = 1}}'
+  ) \
+  <(echo "other" ;
+    grep --with-filename '\(^ *- *\[ \]\|^ *\[ \]\)' $(\
+    (
+      ls \
+        /home/$USER/Documents/WorkNotext.md \
+        /home/$USER/Documents/WorkLog/*/*/*.md \
+        | sort -r \
+      ; \
+      ls \
+        /home/$USER/Dropbox/Wiki/log/*/*/*.md \
+        | sort -r \
+      ) \
+    ) \
+    | sed -e 's/^\/home\/[^\/]*\/Documents\///;s/^\/home\/[^\/]*\/Dropbox\/Wiki\///' \
+    | sed -e 's/:- *\[ *\] */:/;s/: *\[ *\] */:/;s/ *$//'
+  ) | tr '\n' '|'
 )
+
+#COMBO_VALUES=$(
+#  tempfile=$(mktemp)
+#
+#  #curl -X GET 'https://app.asana.com/api/1.0/workspaces/'$WORKSPACE'/tasks/search?assignee.any=me&completed_on=null&opt_fields=name,resource_type,completed,completed_at,assignee,projects,subtasks,this.subtasks.name,this.subtasks.assignee,this.subtasks.completed,assignee.name,this.subtasks.assignee.name,parent.gid,parent.name,custom_fields.name,custom_fields.enum_value.name,this.subtasks.custom_fields.name,this.subtasks.custom_fields.enum_value.name,created_at'  -H 'Accept: application/json'   -H 'Authorization: Bearer '$ASANA_TOKEN \
+#  #  | jq "$JQ_PROGRAM"  -r > "$tempfile"
+#  #(cat "$tempfile" | grep -e '\(Development\|Code Review\)' ; cat "$tempfile" ) \
+#  #  | tr '\t' ' ' \
+#  #  | tr '|' ' ' \
+#  #  | tr '\n' '|' \
+#  #  | sed -e 's/Code Review/📗/g;s/Development/⌚/g;s/In Acceptance/📘/g;s/Inbox/📫/g;s/Backlog/📬/g'
+#  echo "other|$(grep --with-filename '\(^ *- *\[ \]\|^ *\[ \]\)' $(\
+#    (
+#      ls \
+#        /home/$USER/Documents/WorkNotext.md \
+#        /home/$USER/Documents/WorkLog/*/*/*.md \
+#        /home/$USER/Documents/WorkLog/*/*/*.md \
+#        | sort -r \
+#      ; \
+#      ls \
+#        /home/$USER/Dropbox/Wiki/log/*/*/*.md \
+#        | sort -r \
+#      ) \
+#    ) \
+#    | sed -e 's/^\/home\/[^\/]*\/Documents\///;s/^\/home\/[^\/]*\/Dropbox\/Wiki\///' \
+#    | sed -e 's/:- *\[ *\] */:/;s/: *\[ *\] */:/;s/ *$//' | tr '\n' '|'
+#  )"
+#)
 
 
 question() {
@@ -88,7 +154,7 @@ question() {
     --add-combo "Billable to" \
     --combo-values "$(cat "$HOME"/.billable_companies | tr '\n' '|')None" \
     --add-entry "Why failed?" \
-    --text "" \
+    --text "$STARTED - $NOW" \
     --separator "$(echo -e '\t')"
 }
 

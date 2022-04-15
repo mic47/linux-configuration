@@ -5,3 +5,4 @@ xrandr \
   --output HDMI-1 --off \
   --output DP-2 --off \
   --output HDMI-2 --off
+dconf write /org/gnome/desktop/interface/text-scaling-factor 1.0
