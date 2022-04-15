@@ -30,6 +30,23 @@ function fcommit {
   | cut -f 1 -d ' '
 }
 
+function fpackagejson {
+  #| fzf-tmux  -- -d : -n 1 \
+  cat package.json  \
+    | jq '.scripts | to_entries[] | ("yarn " +  .key + ":" + .value) ' -r \
+    | grep -v /// > /tmp/lala ; cat /tmp/lala \
+    | tac \
+    | fzf \
+      --multi \
+      -d : \
+      --no-sort \
+      --nth=1 \
+      --with-nth=1 \
+      --ansi \
+      --preview-window=right:30%:wrap \
+      --preview 'echo {2..-1}' \
+    | cut -d: -f 2
+}
 export -f fcommit
 
 function fbranch {
@@ -83,6 +100,9 @@ bind -m vi-insert -x '"\C-b": fbranch'
 bind -m emacs-standard -x '"\C-f": __fzf_select_from_tmux_pane'
 bind -m vi-command -x '"\C-f": __fzf_select_from_tmux_pane'
 bind -m vi-insert -x '"\C-f": __fzf_select_from_tmux_pane'
+bind -m emacs-standard -x '"\C-g": fpackagejson'
+bind -m vi-command -x '"\C-g": fpackagejson'
+bind -m vi-insert -x '"\C-g": fpackagejson'
 
 fzgrep() {
   grep --color=always $* \
