@@ -86,6 +86,7 @@ replace_with_symlink desktop/albert/albert.conf ~/.config/albert/albert.conf
 mkdir -p ~/.logs
 cat desktop/pomodoro.dconf | envsubst | dconf load /org/gnome/pomodoro/
 replace_with_symlink desktop/pomodoro-question.sh ~/.local/bin/pomodoro-question.sh
+replace_with_symlink desktop/finish-task.sh ~/.local/bin/finish-task.sh
 replace_with_symlink desktop/pomodoro-resume.sh ~/.local/bin/pomodoro-resume.sh
 replace_with_symlink desktop/pomodoro_counter.sh ~/.local/bin/pomodoro_counter.sh
 replace_with_symlink desktop/pomodoro-manual.sh ~/.local/bin/pomodoro-manual.sh

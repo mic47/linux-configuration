@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Finish Task / TODO
+Comment=Finish Task / TODO
+Exec=$HOME/.local/bin/finish-task.sh
+Icon=question
+Terminal=false
+Type=Application
+Categories=Productivity;
