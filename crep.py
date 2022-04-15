@@ -32,6 +32,13 @@ def prepare_scorings(what: str) -> List[Tuple[Pattern, float]]:
         "type",
         "const",
         "object",
+        "public",
+        "private",
+        "static",
+        "fn",
+        "struct",
+        "impl",
+        "enum",
     ]
     scorings = [
         (re.compile(template), score)
@@ -178,6 +185,7 @@ def print_sorted(
     explain: bool,
     color: bool,
     list_files: bool,
+    sort_reversed: bool,
 ) -> None:
     out = []
     for k, v in d.items():
@@ -194,9 +202,9 @@ def print_sorted(
                 )
             )
     if sort_type == "file":
-        out.sort(reverse=True, key=lambda x: (x[0], x[1], -x[2]))
+        out.sort(reverse=sort_reversed, key=lambda x: (x[0], x[1], -x[2]))
     elif sort_type == "line":
-        out.sort(reverse=True, key=lambda x: (x[-1], x[0]))
+        out.sort(reverse=sort_reversed, key=lambda x: (x[-1], x[0]))
     elif sort_type == "none":
         pass
     else:
@@ -222,6 +230,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--input", default="auto", choices=["stdin", "recursive", "git", "auto"])
     parser.add_argument("--color", default="auto", choices=["always", "never", "auto"])
     parser.add_argument("--list-files", "-l", action="store_true", help="Only list files")
+    parser.add_argument("--not-reversed", action="store_true")
     parser.add_argument("pattern", nargs="+")
     args = parser.parse_args()
     if args.color == "auto":
@@ -255,7 +264,6 @@ def grep(*args: str) -> Iterable[Line]:
             line = str(line_raw)
         if line and not line.endswith("Is a directory"):
             print(line, file=sys.stderr)
-
 
 
 def git_ls_files(directory: str) -> Iterable[str]:
@@ -294,7 +302,13 @@ def main() -> None:
     scorings = prepare_scorings(REPLACEMENT)
     d, score = process_input(get_source(args), scorings, scorings_exact)
     print_sorted(
-        d, score, sort_type=args.sort, explain=args.explain, color=args.color, list_files=args.list_files
+        d,
+        score,
+        sort_type=args.sort,
+        explain=args.explain,
+        color=args.color,
+        list_files=args.list_files,
+        sort_reversed=not args.not_reversed,
     )
 
 
