@@ -23,8 +23,8 @@ set timeoutlen=200
 command! ConvertToHTML so $VIMRUNTIME/syntax/2html.vim
 
 set autoread
-map <tab> :bnext<CR>
-map <S-tab> :bprev<CR>
+"map <tab> :bnext<CR>
+"map <S-tab> :bprev<CR>
 
 imap ˙ <C-o>h
 imap ∆ <C-o>j
@@ -391,7 +391,9 @@ Plugin 'dodie/vim-disapprove-deep-indentation'
 Plugin 'stevearc/vim-arduino'
 Plugin 'derekwyatt/vim-scala'  " maybe conflicts with ensime-vim
 Plugin 'tpope/vim-fugitive'
+" Plugin 'shumphrey/fugitive-gitlab.vim'
 Plugin 'tpope/vim-markdown'
+Plugin 'tpope/vim-abolish'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'majutsushi/tagbar'
 Plugin 'luben/sctags'
@@ -402,6 +404,13 @@ Plugin 'ambv/black'
 Plugin 'hashivim/vim-terraform'
 Plugin 'vim-python/python-syntax'
 Plugin 'leafgarland/typescript-vim'
+Plugin 'nathanaelkane/vim-indent-guides'
+" Typescript
+Plugin 'neoclide/coc.nvim', {'branch': 'release'}
+Plugin 'prettier/vim-prettier', { 'do': 'yarn install', 'for': ['typescript'] }
+Plugin 'AndrewRadev/linediff.vim'
+" Diff
+Plugin 'chrisbra/vim-diff-enhanced'
 "Plugin 'showmarks'
 " let g:ycm_filetype_specific_completion_to_disable = {}
 " The following are examples of different formats supported.
@@ -612,3 +621,30 @@ inoremap <expr> <C-e> fzf#vim#complete(fzf#wrap({
   \ 'source':  'python /home/mic/Code/Personal/platypus-desk-todo/parse-emoji.py',
   \ 'options': '--header "Emoji Selection" --no-hscroll --delimiter : --nth 2',
   \ 'reducer': { lines -> join(split(lines[0], ':')[:1], '') }}))
+
+let g:coc_global_extensions = ['coc-tsserver']
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+let g:indent_guides_auto_colors = 0  
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=16
+
+
+highlight DiffAdd    cterm=bold ctermbg=DarkBlue guibg=DarkBlue
+highlight DiffDelete term=bold ctermfg=12 ctermbg=DarkCyan gui=bold guifg=Blue guibg=DarkCyan
+highlight DiffChange cterm=bold ctermbg=black guibg=DarkGray
+highlight DiffText   cterm=bold ctermbg=DarkGray guibg=DarkGray
+
+set diffopt+=internal,algorithm:patience
+"nnoremap <C-M> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+"      \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+"      \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+
+hi SpellBad term=reverse ctermbg=darkred gui=undercurl guisp=Red
+
+" Quickfix
+if version > 801
+  set switchbuf+=uselast
+endif
