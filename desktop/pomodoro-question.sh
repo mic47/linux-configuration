@@ -1,4 +1,5 @@
 #!/bin/bash
+
 JQ_PROGRAM='
 .data
 | [
@@ -78,8 +79,8 @@ if [ "$((DURATION - 60))" -lt "$ELAPSED" ] ; then
 fi
 
 
-WORKSPACE=$(cat ~/.ssh/asana.token | jq .workspace -r)
-ASANA_TOKEN=$(cat ~/.ssh/asana.token | jq .asana_token -r)
+#WORKSPACE=$(cat ~/.ssh/asana.token | jq .workspace -r)
+#ASANA_TOKEN=$(cat ~/.ssh/asana.token | jq .asana_token -r)
 
 COMBO_VALUES=$(python \
   -c "$PYTHON_PROGRAM" \
@@ -108,6 +109,8 @@ COMBO_VALUES=$(python \
     | sed -e 's/:- *\[ *\] */:/;s/: *\[ *\] */:/;s/ *$//'
   ) | tr '\n' '|'
 )
+
+echo $COMBO_VALUES
 
 #COMBO_VALUES=$(
 #  tempfile=$(mktemp)
@@ -138,7 +141,6 @@ COMBO_VALUES=$(python \
 #)
 
 
-echo "A"
 question() {
   (sleep 1 && wmctrl -F -a "Pomodoro survey" -b add,above) &
   zenity \
@@ -147,7 +149,7 @@ question() {
     --add-combo="Was pomodoro successfull?" \
     --combo-values="succeed|fail" \
     --add-entry "What did you do?" \
-    --add-combo "What asana task?" \
+    --add-combo "What task?" \
     --combo-values "$COMBO_VALUES" \
     --add-list "Type of work" \
     --list-values "Focus work|Meeting|Overhead|Learning" \
@@ -159,9 +161,15 @@ question() {
 }
 
 (
-  form_output=$( question || question || question )
+  form_output=$(question)
+  if [ -z "$form_output" ] ; then
+    form_output=$(question)
+    if [ -z "$form_output" ] ; then
+      form_output=$(question)
+    fi
+  fi
 
   echo -e "${NOW_TIMESTAMP}\t${NOW}\t$ELAPSED\t$form_output" >> "$HOME"/.logs/pomodoro.csv
   env > "$HOME"/.logs/pomodoro.env
   echo "$*" > "$HOME"/.logs/pomodoro.args
-)
+) &

@@ -39,6 +39,7 @@ def prepare_scorings(what: str) -> List[Tuple[Pattern, float]]:
         "struct",
         "impl",
         "enum",
+        "for",
     ]
     scorings = [
         (re.compile(template), score)
@@ -65,6 +66,9 @@ def prepare_scorings(what: str) -> List[Tuple[Pattern, float]]:
                 (rf"@given[(]['\"].*{what}", 300000),
                 (rf"@then[(]['\"].*{what}", 300000),
                 (rf"@when[(]['\"].*{what}", 300000),
+                # Some codegen
+                (rf"""new_trait[(]"{what}"[)]""", 600000),
+
             ],
         )
     ]

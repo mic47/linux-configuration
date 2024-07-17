@@ -22,10 +22,10 @@ set -ex
 
 sudo apt-get install curl wget
 
-curl -sS https://download.spotify.com/debian/pubkey_0D811D58.gpg | sudo apt-key add -
-echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
-curl https://build.opensuse.org/projects/home:manuelschneid3r/public_key | sudo apt-key add -
-echo 'deb http://download.opensuse.org/repositories/home:/manuelschneid3r/xUbuntu_20.04/ /' | sudo tee /etc/apt/sources.list.d/home:manuelschneid3r.list
+#curl -sS https://download.spotify.com/debian/pubkey_0D811D58.gpg | sudo apt-key add -
+#echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
+#curl https://build.opensuse.org/projects/home:manuelschneid3r/public_key | sudo apt-key add -
+#echo 'deb http://download.opensuse.org/repositories/home:/manuelschneid3r/xUbuntu_20.04/ /' | sudo tee /etc/apt/sources.list.d/home:manuelschneid3r.list
 
 sudo apt update
 sudo apt-get install \
@@ -52,7 +52,6 @@ sudo apt-get install \
 	pulseaudio-equalizer \
   pulseaudio-utils \
   python3-pip \
-	spotify-client \
 	xautolock \
 	xbindkeys \
 	xbuilder \

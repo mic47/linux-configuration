@@ -358,7 +358,7 @@ augroup myvimrc
     au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc so $MYVIMRC | if has('gui_running') | so $MYGVIMRC | endif
 augroup END
 
-let g:vundle_default_git_proto = 'https'
+"let g:vundle_default_git_proto = 'git'
 """ BEGIN OF VUNDLE
 set nocompatible              " be iMproved, required
 filetype off                  " required
@@ -452,6 +452,7 @@ let g:terraform_align=1
 
 let g:LookOfDisapprovalTabTreshold=5
 let g:LookOfDisapprovalSpaceTreshold=(&tabstop*5)
+autocmd FileType tf let g:LookOfDisapprovalTabThreshold=0 | let g:LookOfDisapprovalSpaceThreshold=0
 
 let g:signify_sign_overwrite = 0
 
@@ -660,6 +661,11 @@ highlight Pmenu ctermbg=black guibg=black ctermfg=white
 "endfunction
 "autocmd FileType rust call RUSTSET()
 
+function! TSSET()
+  nmap <silent> gy :Prettier<CR>
+endfunction
+autocmd FileType typescript call TSSET()
+
 highlight DiffAdd    cterm=bold ctermbg=DarkBlue guibg=DarkBlue
 highlight DiffDelete term=bold ctermfg=12 ctermbg=DarkCyan gui=bold guifg=Blue guibg=DarkCyan
 highlight DiffChange cterm=bold ctermbg=black guibg=DarkGray
@@ -706,3 +712,4 @@ function StoreTaskFile()
 endfunction
 command! StoreTaskFile call StoreTaskFile()
 autocmd BufWritePost *.tasks call StoreTaskFile()
+"command! -nargs=0 Prettier :call CocAction('runCommand', 'prettier.formatFile')

@@ -44,10 +44,18 @@ export FZF_CTRL_R_COMMAND='__superhistory_for_fzf__'
 
 # ====== Prompt visual hints ==
 
+function new_env_variables {
+  diff ${__envs:-} <(env | grep -v __timer | grep -v SHLVL)
+}
+
+export -f new_env_variables
+
 function proml {
-  PS1="\[\033[1;33m\][\$(date)] Last command took \$(post_command) second(s)\[\033[1;0m\]\$(parse_git_branch)\n\$(future_command)\n$PS1"
+  TITLE=$(if [[ ! -z "${TMUX}" ]] ; then echo "\[\e]2;$(tmux display-message -p '#S')\a\]" ; fi)
+  PS1="\[\033[1;33m\][\$(date)] Last command took \$(post_command) second(s)\[\033[1;0m\]\$(parse_git_branch)\n\$(future_command)\n$PS1${TITLE}"
 }
 proml
+
 
 # ====== Aliases ==============
 
@@ -129,4 +137,32 @@ clear_branches() {
      | cut -d '|' -f 3 \
      | grep -v '^master$' \
      | parallel git branch -D {}
+}
+
+mit-log-fzf() {
+  ref=${1:-HEAD}
+  path=${2:-.}
+  git log --oneline --decorate --color=always "$ref" "$path" \
+    | fzf  --multi --no-sort --nth=2..-1 --ansi --bind alt-up:preview-page-up,alt-down:preview-page-down --preview-window=left:70%:wrap  \
+    --preview 'git show {+1} '"$path"' | bat --color always --language diff'
+
+}
+
+strip-jsonc() {
+  X=$(mktemp);
+  (echo "var foo =" ; cat ; echo "console.log(JSON.stringify(foo))") > $X;
+  node "$X"
+}
+
+function qrepl()
+{
+  final_query=$(echo '' |
+    fzf \
+      --preview "$1"\
+      --preview-window="down:99%" \
+      --height="99%" \
+      --bind "tab:replace-query,return:print-query" \
+    )
+
+  echo ${1/\{q\}/"$final_query"}
 }
