@@ -1,0 +1,242 @@
+Screen 0: minimum 320 x 200, current 9840 x 3840, maximum 16384 x 16384
+eDP-1 connected 3840x2160+0+0 (normal left inverted right x axis y axis) 345mm x 194mm
+	_GNOME_FLASHBACK_PRESENTATION_OUTPUT: 0 
+	EDID: 
+		00ffffffffffff0009e5d70600000000
+		011a0104a523137802a260a45750a025
+		14505400000001010101010101010101
+		0101010101014dd000a0f0703e803020
+		350059c21000001a0000000000000000
+		00000000000000000000000000fe0042
+		4f452048460a202020202020000000fe
+		004e5631353651554d2d4e34340a00dd
+	Colorspace: Default 
+		supported: Default, BT709_YCC, XVYCC_601, XVYCC_709, SYCC_601, opYCC_601, opRGB, BT2020_CYCC, BT2020_RGB, BT2020_YCC, DCI-P3_RGB_D65, RGB_WIDE_FIXED, RGB_WIDE_FLOAT, BT601_YCC
+	max bpc: 12 
+		range: (6, 12)
+	Broadcast RGB: Automatic 
+		supported: Automatic, Full, Limited 16:235
+	panel orientation: Normal 
+		supported: Normal, Upside Down, Left Side Up, Right Side Up
+	scaling mode: Full aspect 
+		supported: Full, Center, Full aspect
+	link-status: Good 
+		supported: Good, Bad
+	CTM: 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 
+		0 1 
+	CONNECTOR_ID: 95 
+		supported: 95
+	non-desktop: 0 
+		range: (0, 1)
+   3840x2160     60.00*+
+   3200x1800     60.00  
+   2880x1620     60.00  
+   2560x1600     60.00  
+   2560x1440     60.00  
+   2048x1536     60.00  
+   1920x1440     60.00  
+   1856x1392     60.00  
+   1792x1344     60.00  
+   2048x1152     60.00  
+   1920x1200     60.00  
+   1920x1080     60.00  
+   1600x1200     60.00  
+   1680x1050     60.00  
+   1400x1050     60.00  
+   1600x900      60.00  
+   1280x1024     60.00  
+   1400x900      60.00  
+   1280x960      60.00  
+   1440x810      60.00  
+   1368x768      60.00  
+   1280x800      60.00  
+   1280x720      60.00  
+   1024x768      60.00  
+   960x720       60.00  
+   928x696       60.00  
+   896x672       60.00  
+   1024x576      60.00  
+   960x600       60.00  
+   960x540       60.00  
+   800x600       60.00  
+   840x525       60.00  
+   864x486       60.00  
+   700x525       60.00  
+   800x450       60.00  
+   640x512       60.00  
+   700x450       60.00  
+   640x480       60.00  
+   720x405       59.99  
+   684x384       60.00  
+   640x360       59.99  
+   512x384       60.00  
+   512x288       59.99  
+   480x270       59.99  
+   400x300       60.00  
+   432x243       60.00  
+   320x240       60.00  
+   360x202       59.99  
+   320x180       59.99  
+DP-1 connected primary 2160x3840+7680+0 left (normal left inverted right x axis y axis) 597mm x 336mm
+	_GNOME_FLASHBACK_PRESENTATION_OUTPUT: 0 
+	EDID: 
+		00ffffffffffff0005e3902715f70000
+		1b1d0103803c22782a67a1a5554da227
+		0e5054bfef00d1c0b300950081808140
+		81c0010101014dd000a0f0703e803020
+		350055502100001aa36600a0f0701f80
+		3020350055502100001a000000fc0055
+		32373930420a202020202020000000fd
+		0017501ea03c000a20202020202001a2
+		020333f14c9004031f1301125d5e5f60
+		6123090707830100006d030c00100038
+		7820006001020367d85dc401788003e3
+		0f000c565e00a0a0a029503020350055
+		502100001e023a801871382d40582c45
+		0055502100001e011d007251d01e206e
+		28550055502100001e4d6c80a070703e
+		8030203a0055502100001a000000004e
+	HDCP Content Type: HDCP Type0 
+		supported: HDCP Type0, HDCP Type1
+	Content Protection: Undesired 
+		supported: Undesired, Desired, Enabled
+	Colorspace: Default 
+		supported: Default, BT709_YCC, XVYCC_601, XVYCC_709, SYCC_601, opYCC_601, opRGB, BT2020_CYCC, BT2020_RGB, BT2020_YCC, DCI-P3_RGB_D65, RGB_WIDE_FIXED, RGB_WIDE_FLOAT, BT601_YCC
+	max bpc: 12 
+		range: (6, 12)
+	Broadcast RGB: Automatic 
+		supported: Automatic, Full, Limited 16:235
+	audio: auto 
+		supported: force-dvi, off, auto, on
+	subconnector: HDMI 
+		supported: Unknown, VGA, DVI-D, HDMI, DP, Wireless, Native
+	link-status: Good 
+		supported: Good, Bad
+	CTM: 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 
+		0 1 
+	CONNECTOR_ID: 103 
+		supported: 103
+	non-desktop: 0 
+		range: (0, 1)
+   3840x2160     60.00*+  60.00    50.00    59.94    30.00    25.00    24.00    29.97    23.98    29.98  
+   1920x2160     59.99  
+   2560x1440     59.95  
+   1920x1080     60.00    50.00    59.94  
+   1680x1050     59.88  
+   1280x1024     75.02    60.02  
+   1440x900      59.90  
+   1280x960      60.00  
+   1280x720      60.00    50.00    59.94  
+   1024x768      75.03    70.07    60.00  
+   832x624       74.55  
+   800x600       72.19    75.00    60.32    56.25  
+   720x576       50.00  
+   720x480       60.00    59.94  
+   640x480       75.00    72.81    66.67    60.00    59.94  
+   720x400       70.08  
+HDMI-1 disconnected (normal left inverted right x axis y axis)
+	HDCP Content Type: HDCP Type0 
+		supported: HDCP Type0, HDCP Type1
+	Content Protection: Undesired 
+		supported: Undesired, Desired, Enabled
+	max bpc: 12 
+		range: (8, 12)
+	content type: No Data 
+		supported: No Data, Graphics, Photo, Cinema, Game
+	Colorspace: Default 
+		supported: Default, SMPTE_170M_YCC, BT709_YCC, XVYCC_601, XVYCC_709, SYCC_601, opYCC_601, opRGB, BT2020_CYCC, BT2020_RGB, BT2020_YCC, DCI-P3_RGB_D65, DCI-P3_RGB_Theater
+	aspect ratio: Automatic 
+		supported: Automatic, 4:3, 16:9
+	Broadcast RGB: Automatic 
+		supported: Automatic, Full, Limited 16:235
+	audio: auto 
+		supported: force-dvi, off, auto, on
+	link-status: Good 
+		supported: Good, Bad
+	CTM: 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 
+		0 1 
+	CONNECTOR_ID: 113 
+		supported: 113
+	non-desktop: 0 
+		range: (0, 1)
+DP-2 disconnected (normal left inverted right x axis y axis)
+	HDCP Content Type: HDCP Type0 
+		supported: HDCP Type0, HDCP Type1
+	Content Protection: Undesired 
+		supported: Undesired, Desired, Enabled
+	Colorspace: Default 
+		supported: Default, BT709_YCC, XVYCC_601, XVYCC_709, SYCC_601, opYCC_601, opRGB, BT2020_CYCC, BT2020_RGB, BT2020_YCC, DCI-P3_RGB_D65, RGB_WIDE_FIXED, RGB_WIDE_FLOAT, BT601_YCC
+	max bpc: 12 
+		range: (6, 12)
+	Broadcast RGB: Automatic 
+		supported: Automatic, Full, Limited 16:235
+	audio: auto 
+		supported: force-dvi, off, auto, on
+	subconnector: Unknown 
+		supported: Unknown, VGA, DVI-D, HDMI, DP, Wireless, Native
+	link-status: Good 
+		supported: Good, Bad
+	CTM: 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 
+		0 1 
+	CONNECTOR_ID: 119 
+		supported: 119
+	non-desktop: 0 
+		range: (0, 1)
+HDMI-2 connected 3840x2160+3840+0 (normal left inverted right x axis y axis) 621mm x 341mm
+	EDID: 
+		00ffffffffffff00220ed83601010101
+		33200103803e22782aada5ad50459f25
+		0e5054a10800d100d1c0a9c095008180
+		0101010101014dd000a0f0703e803020
+		35006d552100001a000000fd001e3c1b
+		883c000a202020202020000000fc0048
+		502055323820344b20484452000000ff
+		003143523235313035374b0a202001d5
+		020344f14d6160101f04131203051411
+		0201230907078301000067030c001000
+		384467d85dc401788001681a00000101
+		283cede6060701646401e3056000e20f
+		03e2006b565e00a0a0a0295030203500
+		6d552100001aa36600a0f0701f803020
+		35006d552100001a0000000000000000
+		00000000000000000000000000000042
+	_GNOME_FLASHBACK_PRESENTATION_OUTPUT: 0 
+	HDCP Content Type: HDCP Type0 
+		supported: HDCP Type0, HDCP Type1
+	Content Protection: Undesired 
+		supported: Undesired, Desired, Enabled
+	max bpc: 12 
+		range: (8, 12)
+	content type: No Data 
+		supported: No Data, Graphics, Photo, Cinema, Game
+	Colorspace: Default 
+		supported: Default, SMPTE_170M_YCC, BT709_YCC, XVYCC_601, XVYCC_709, SYCC_601, opYCC_601, opRGB, BT2020_CYCC, BT2020_RGB, BT2020_YCC, DCI-P3_RGB_D65, DCI-P3_RGB_Theater
+	aspect ratio: Automatic 
+		supported: Automatic, 4:3, 16:9
+	Broadcast RGB: Automatic 
+		supported: Automatic, Full, Limited 16:235
+	audio: auto 
+		supported: force-dvi, off, auto, on
+	link-status: Good 
+		supported: Good, Bad
+	CTM: 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 
+		0 1 
+	CONNECTOR_ID: 125 
+		supported: 125
+	non-desktop: 0 
+		range: (0, 1)
+   3840x2160     29.98* 
+   2560x1440     59.95  
+   1920x1200     59.95  
+   1920x1080     60.00    60.00    50.00    59.94  
+   1920x1080i    60.00    50.00    59.94  
+   1600x900      60.00  
+   1280x1024     60.02  
+   1440x900      59.90  
+   1280x720      60.00    50.00    59.94  
+   1024x768      60.00  
+   800x600       60.32  
+   720x576       50.00  
+   720x480       60.00    59.94  
+   640x480       60.00    59.94  
+   720x400       70.08  

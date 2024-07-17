@@ -1,5 +1,4 @@
 #!/bin/bash
-
 JQ_PROGRAM='
 .data
 | [
@@ -65,7 +64,7 @@ for todo in all_todos:
 STATE=$1
 DURATION=$2
 # shellcheck disable=SC2001
-ELAPSED=$(echo "$3" | sed -e 's/[.].*$//')
+ELAPSED=$(echo "$3" | sed -e 's/[.].*$//' | sed -e 's/^$/0/')
 TRIGGER=$4
 NOW_TIMESTAMP=${5:-$(date +%s)}
 NOW=$(date "+%y-%m-%d/%H:%M:%S" -d "@$NOW_TIMESTAMP")
@@ -139,6 +138,7 @@ COMBO_VALUES=$(python \
 #)
 
 
+echo "A"
 question() {
   (sleep 1 && wmctrl -F -a "Pomodoro survey" -b add,above) &
   zenity \
@@ -164,4 +164,4 @@ question() {
   echo -e "${NOW_TIMESTAMP}\t${NOW}\t$ELAPSED\t$form_output" >> "$HOME"/.logs/pomodoro.csv
   env > "$HOME"/.logs/pomodoro.env
   echo "$*" > "$HOME"/.logs/pomodoro.args
-) &
+)

@@ -17,6 +17,8 @@ MONITORS=$(xrandr \
 LAST_KNOW_CONFIGURATION="last_configuration.txt"
 
 LAST_CONF=$(cat "$LAST_KNOW_CONFIGURATION" | tr -d '\n')
+echo "Last know configuration: ${LAST_CONF}"
+echo "Current configuration: ${MONITORS}"
 
 if [[ "$LAST_CONF" == "$MONITORS" && "$1" != "startup" ]] ; then
   echo "Last configuration is same as before, not updating"
@@ -34,6 +36,7 @@ for i in *sh ; do
     | create_screen_representation
   )
   if [ "$MONITORS" == "$CURRENT" ] ; then
+    echo "Executing script $i"
     ./"$i"
     exit 0
   fi;

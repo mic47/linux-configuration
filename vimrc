@@ -298,10 +298,12 @@ let g:ale_fixers = {
   \ 'javascript': ['eslint'],
   \ 'typescript': ['eslint'],
   \ 'typescriptreact': ['eslint'],
-  \ 'python': ['mypy', 'pylint']
+  \ 'python': ['mypy', 'pylint'],
+  \ 'cs': ['OmniSharp']
   \ }
 let g:ale_linters = {
-  \ 'python': ['mypy', 'pylint']
+  \ 'python': ['mypy', 'pylint'],
+  \ 'cs': ['OmniSharp']
   \ }
 
 function! MEDIAWIKISET()
@@ -356,7 +358,7 @@ augroup myvimrc
     au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc so $MYVIMRC | if has('gui_running') | so $MYGVIMRC | endif
 augroup END
 
-let g:vundle_default_git_proto = 'git'
+let g:vundle_default_git_proto = 'https'
 """ BEGIN OF VUNDLE
 set nocompatible              " be iMproved, required
 filetype off                  " required
@@ -405,9 +407,11 @@ Plugin 'hashivim/vim-terraform'
 Plugin 'vim-python/python-syntax'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'nathanaelkane/vim-indent-guides'
+" C#
+Bundle 'OmniSharp/omnisharp-vim'
 " Typescript
-Plugin 'neoclide/coc.nvim', {'branch': 'release'}
-Plugin 'prettier/vim-prettier', { 'do': 'yarn install', 'for': ['typescript'] }
+"Plugin 'neoclide/coc.nvim', {'branch': 'release'}
+Plugin 'prettier/vim-prettier', { 'do': 'yarn install', 'for': ['typescript', 'javascript'] }
 Plugin 'AndrewRadev/linediff.vim'
 " Diff
 Plugin 'chrisbra/vim-diff-enhanced'
@@ -616,21 +620,45 @@ let g:ycm_extra_conf_vim_data = [
   \]
 let g:ycm_global_ycm_extra_conf = '~/.global_extra_conf.py'
 let g:ycm_autoclose_preview_window_after_completion=1
+let g:ycm_auto_hover = 'CursorHold'
+let g:ycm_always_populate_location_list = 1
 
 inoremap <expr> <C-e> fzf#vim#complete(fzf#wrap({
-  \ 'source':  'python /home/mic/Code/Personal/platypus-desk-todo/parse-emoji.py',
+  \ 'source':  'python3 /home/mic/Code/Personal/platypus-desk-todo/parse-emoji.py',
   \ 'options': '--header "Emoji Selection" --no-hscroll --delimiter : --nth 2',
   \ 'reducer': { lines -> join(split(lines[0], ':')[:1], '') }}))
 
+let g:OmniSharp_selector_ui = ''
+autocmd CursorHold *.cs OmniSharpTypeLookup
+
 let g:coc_global_extensions = ['coc-tsserver']
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+"nmap <silent> gd <Plug>(coc-definition)
+"nmap <silent> gy <Plug>(coc-type-definition)
+"nmap <silent> gi <Plug>(coc-implementation)
+"nmap <silent> gr <Plug>(coc-references)
 let g:indent_guides_auto_colors = 0  
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=0
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=16
 
+nmap <silent> gh <Plug>(YCMHover)
+highlight Pmenu ctermbg=black guibg=black ctermfg=white
+"function! RUSTSET()
+  "nmap <silent> gd <Plug>(coc-definition)
+  "nmap <silent> gc <Plug>(coc-type-definition)
+  "nmap <silent> gi <Plug>(coc-implementation)
+  "nmap <silent> gr <Plug>(coc-references)
+  nmap <silent> gd :YcmCompleter GoToDefinition<CR>
+  nmap <silent> gc :YcmCompleter GoToDeclaration<CR>
+  nmap <silent> gu :YcmCompleter GoToCallers<CR>
+  nmap <silent> gr :YcmCompleter GoToReferences<CR>
+  nmap <silent> gf <Plug>(YCMFindSymbolInWorkspace)
+  nmap <silent> gt :YcmCompleter GetType<CR>
+  nmap <silent> go :YcmCompleter GetDoc<CR>
+  nmap <silent> gx :YcmCompleter FixIt<CR>
+  nmap <silent> gy :YcmCompleter Format<CR>
+  let b:ycm_hover = { 'command': 'GetDoc', 'syntax': &syntax }
+"endfunction
+"autocmd FileType rust call RUSTSET()
 
 highlight DiffAdd    cterm=bold ctermbg=DarkBlue guibg=DarkBlue
 highlight DiffDelete term=bold ctermfg=12 ctermbg=DarkCyan gui=bold guifg=Blue guibg=DarkCyan
@@ -644,7 +672,37 @@ set diffopt+=internal,algorithm:patience
 
 hi SpellBad term=reverse ctermbg=darkred gui=undercurl guisp=Red
 
+set expandtab
 " Quickfix
 if version > 801
   set switchbuf+=uselast
 endif
+set backupcopy=yes
+function AddTask()
+    let cursor_pos = getpos('.')
+    let col = col(".")
+    normal! ^mq:2^yw'qf]a tp
+    call setpos('.', cursor_pos)
+    normal! llllll
+endfunction
+command! AddTask call AddTask()
+function AddSection()
+    let cursor_pos = getpos('.')
+    let col = col(".")
+    normal! ^mq:3^yw'q^k$ea sp
+    call setpos('.', cursor_pos)
+    normal! llllll
+endfunction
+command! AddSection call AddSection()
+function InitTaskFile()
+    let uuid = trim(system("uuidgen"))
+    call append(0, ["TASK FILE HEADER BEGIN", "0000", "0000", uuid, "TASK FILE HEADER END"])
+endfunction
+command! InitTaskFile call InitTaskFile()
+
+function StoreTaskFile()
+    execute 'silent !python $HOME/Code/Personal/platypus-tasks/parse.py ' . expand('%')
+    redraw!
+endfunction
+command! StoreTaskFile call StoreTaskFile()
+autocmd BufWritePost *.tasks call StoreTaskFile()
