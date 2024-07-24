@@ -11,12 +11,19 @@ function prettify_processes() {
       s/node/💩/g;
       s/sccache/📥/g;
       s/slack/💬💩/g;
-      s/vim/⌨️🥇/g;
+      s/nvim/⌨️🥇/g;
+      s/vim/⌨️🥇🙈/g;
       s/code/⌨️💩/g
 END
     )"
 }
 
+function prettify_statusline() {
+    sed -e "$(cat ~/.i3status-replacements.sed ; cat <<-END
+      s/1000 Mbit\/s/🚅/g;
+END
+    )"
+}
 i3status  | while :
 do
   read line
@@ -42,5 +49,5 @@ do
     | prettify_processes \
     | tr '\n' ' '
   )
-  echo "$TODO | $work_today $pomodoro | $TOP_PROCESS | $TOP_CPU_PROCESS | $line" || exit 1
+  echo "$TODO | $work_today $pomodoro | $TOP_PROCESS | $TOP_CPU_PROCESS | $(echo "$line" | prettify_statusline | tr '\n' ' ')" || exit 1
 done

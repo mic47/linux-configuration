@@ -1,3 +1,5 @@
+echo "USE NEOVIM!"
+"
 " Mic's .vimrc 
 " inspired by .vimrc by MisoF (http://people.ksp.sk/~misof/programy/vimrc.html)
 "
