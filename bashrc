@@ -166,3 +166,11 @@ function qrepl()
 
   echo ${1/\{q\}/"$final_query"}
 }
+
+function tmux_sessionizer() {
+  tmux-sessionizer
+}
+
+bind -m emacs-standard -x '"\C-e": tmux-sessionizer'
+bind -m vi-command -x '"\C-e": tmux-sessionizer'
+bind -m vi-insert -x '"\C-e": tmux-sessionizer'
