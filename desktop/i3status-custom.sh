@@ -8,12 +8,14 @@ function prettify_processes() {
       s/firefox/🔥🦊/g;
       s/cargo/📦/g;
       s/rust.*/🦀/g;
-      s/node/💩/g;
+      s/node/💩🟢/g;
+      s/java/💩🫖/g;
       s/sccache/📥/g;
       s/slack/💬💩/g;
       s/nvim/⌨️🥇/g;
       s/vim/⌨️🥇🙈/g;
       s/code/⌨️💩/g
+      s/qemu-system-x86/🤖🛠️/g
 END
     )"
 }
