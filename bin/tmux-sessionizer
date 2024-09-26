@@ -10,16 +10,33 @@ if [[ -z $selected ]]; then
     exit 0
 fi
 
+function create_session_if_not_exists() {
+    selected_name=$1
+    selected=$2
+    if ! tmux has-session -t="$selected_name" 2> /dev/null; then
+        # There is no session with desired name, create it
+        tmux new-session -ds "$selected_name" -c "$selected"
+    fi
+}
+
 selected_name=$(basename "$selected" | tr . _)
 tmux_running=$(pgrep tmux)
 
-if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
-    tmux new-session -s "$selected_name" -c "$selected"
+if [[ -z "${TMUX}" ]] ; then
+    # Not inside tmux session
+    if [[ -z "${tmux_running}" ]] ; then
+        # Tmux is not running, create new session and switch to it.
+        tmux new-session -s "$selected_name" -c "$selected"
+        exit 0
+    else
+        # Tmux is running, make sure the session exists.
+        create_session_if_not_exists "${selected_name}" "${selected}"
+        tmux attach -t "$selected_name"
+        exit 0
+    fi
+else 
+    # Inside tmux session, we assume it is running, make sure the session exists.
+    create_session_if_not_exists "${selected_name}" "${selected}"
+    tmux switch-client -t "$selected_name"
     exit 0
 fi
-
-if ! tmux has-session -t="$selected_name" 2> /dev/null; then
-    tmux new-session -ds "$selected_name" -c "$selected"
-fi
-
-tmux switch-client -t "$selected_name"
