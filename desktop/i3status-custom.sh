@@ -36,7 +36,7 @@ do
   TOP_PROCESS=$(
     ps -xa -o %mem=,comm= --sort=-%mem \
     | sed -e 's/^ *//;s/ *$//;s/  */ /;s/WebContent\|WebExtensions\|Web\|Isolated .*\|RDD/firefox/' \
-    | awk '{cmd[$2] = cmd[$2]+$1} END{for (x in cmd) {printf("%.1fG %s\n", cmd[x]*32/100, x)}}' \
+    | awk '{cmd[$2] = cmd[$2]+$1} END{for (x in cmd) {if (x != "ps") printf("%.1fG %s\n", cmd[x]*32/100, x)}}' \
     | sort -rn \
     | head -n 1 \
     | prettify_processes \
@@ -45,7 +45,7 @@ do
   TOP_CPU_PROCESS=$(
     ps -xa -o %cpu=,comm= --sort=-%cpu \
     | sed -e 's/^ *//;s/ *$//;s/  */ /;s/WebContent\|WebExtensions\|Web\|Isolated .*\|RDD/firefox/' \
-    | awk '{cmd[$2] = cmd[$2]+$1} END{for (x in cmd) {printf("%.1f%% %s\n", cmd[x], x)}}'  \
+    | awk '{cmd[$2] = cmd[$2]+$1} END{for (x in cmd) {if (x != "ps") printf("%.1f%% %s\n", cmd[x], x)}}'  \
     | sort -rn \
     | head -n 1 \
     | prettify_processes \
