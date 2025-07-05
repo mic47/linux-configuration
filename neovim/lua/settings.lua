@@ -1,4 +1,5 @@
 vim.cmd('set grepprg=crep')
+vim.cmd('set grepformat=%f:%l:%m')
 --
 -- General settings
 vim.g.t_co = 256
