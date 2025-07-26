@@ -17,3 +17,4 @@ vim.keymap.set('n', 'ge', vim.lsp.buf.rename, opts)
 vim.keymap.set('n', 'gh', vim.lsp.buf.hover, opts)
 vim.keymap.set('n', 'go', vim.lsp.buf.document_symbol, opts)
 
+vim.keymap.set("n", "<C-e>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
