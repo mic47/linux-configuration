@@ -4,6 +4,7 @@ vim.cmd('map <silent> <C-G> <Plug>(code_browse_browser)')
 vim.cmd('map <silent> <Leader>g <Plug>(code_browse_browser)')
 vim.cmd('map <silent> <C-F> <Plug>(code_browse_grep)')
 
+vim.cmd('map <silent> <C-P> :call fzf#vim#gitfiles(\'.\')<CR>')
 
 vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
 vim.keymap.set('n', 'gg', vim.diagnostic.open_float, nil, { focusable = false })

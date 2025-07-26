@@ -38,6 +38,7 @@ require("lazy").setup({
   "nvim-treesitter/nvim-treesitter",
   "tpope/vim-fugitive",
   "mic47/platypus-vim-code-browse",
+  { 'junegunn/fzf.vim', dependencies = { 'junegunn/fzf' } },
   "sbdchd/neoformat",
   {
     "pmizio/typescript-tools.nvim",
