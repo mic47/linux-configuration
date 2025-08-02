@@ -32,3 +32,18 @@ autocmd BufWritePost *.tasks call StoreTaskFile()
 autocmd BufEnter *.tasks setl filetype=tasks
 autocmd BufEnter *.tasks setl foldmethod=syntax
 ]])
+
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = "*.tasks",
+  callback = function()
+    vim.bo.filetype = "tasks"
+    -- Optionally, auto-start your language server for this buffer:
+    vim.lsp.start {
+      name = "mytasks_lsp",
+      cmd = { "python3", os.getenv("HOME") .. "/Code/Personal/platypus-tasks/tasks_lsp.py" },  -- Adjust path as needed
+      filetypes = {"tasks"},
+      root_dir = vim.fn.getcwd(),
+      -- add any other custom config here
+    }
+  end
+})
