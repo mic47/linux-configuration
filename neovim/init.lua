@@ -37,6 +37,9 @@ require("lazy").setup({
   "hrsh7th/cmp-buffer",
   "nvim-treesitter/nvim-treesitter",
   "tpope/vim-fugitive",
+  --
+  "github/copilot.vim",
+  --
   "mic47/platypus-vim-code-browse",
   { 'junegunn/fzf.vim', dependencies = { 'junegunn/fzf' } },
   "sbdchd/neoformat",
