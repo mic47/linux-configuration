@@ -39,6 +39,24 @@ require("lazy").setup({
   "tpope/vim-fugitive",
   --
   "github/copilot.vim",
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    dependencies = {
+      { "nvim-lua/plenary.nvim", branch = "master" },
+    },
+    build = "make tiktoken",
+    opts = {
+      -- See Configuration section for options
+      mappings = {
+        close = { normal = "", insert = "" },
+        toggle = { normal = "", insert = "" },
+        submit = { normal = "<CR>", insert = "" },
+        reset = { normal = "", insert = "" },
+        scroll_up = { normal = "", insert = "" },
+        scroll_down = { normal = "", insert = "" },
+      },
+    },
+  },
   --
   "mic47/platypus-vim-code-browse",
   { 'junegunn/fzf.vim', dependencies = { 'junegunn/fzf' } },
