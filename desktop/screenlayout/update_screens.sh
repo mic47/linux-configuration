@@ -22,7 +22,7 @@ echo "Current configuration: ${MONITORS}"
 
 if [[ "$LAST_CONF" == "$MONITORS" && "$1" != "startup" ]] ; then
   echo "Last configuration is same as before, not updating"
-  exit 0
+  #exit 0
 fi
 
 echo "$MONITORS" > "$LAST_KNOW_CONFIGURATION"
