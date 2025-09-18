@@ -44,6 +44,10 @@ hours_time() {
   printf "%d:%02d" "$(($1/3600))" "$(($1%3600/60))"
 }
 
+leave_time() {
+  hours_time "$(( $(date '+%H*3600+%M*60+%S' | sed -e 's/\b0*//g') + $1 ))"
+}
+
 hours_time_decimal() {
   echo "scale=3;$1/3600" | bc -l
 }
@@ -107,14 +111,23 @@ success_time() {
   if [ "$WORKED_TIME" == "0" ] ; then
     WORKED_TIME=1
   fi
-  echo $((100*SUCCESS_TIME / WORKED_TIME))
+  PERCENT=$((100*SUCCESS_TIME / WORKED_TIME))
+  if (( "${PERCENT}" >= 90 )) ; then
+    echo "🟩"
+  elif (( "${PERCENT}" >= 70 )) ; then
+    echo "🟨"
+  elif (( "${PERCENT}" >= 50 )) ; then
+    echo "🟧"
+  else
+    echo "🟥"
+  fi
 }
 
 COMPANY=Wincent
-
-echo "Time left $(hours_time "$(time_left "$COMPANY" "$TODAY_REGEX")")($(success_time "$COMPANY" "$TODAY_REGEX")%)"
-echo "w: $(hours_time "$(time_left "$COMPANY" "$THIS_WEEK_REGEX")")($(success_time "$COMPANY" "$THIS_WEEK_REGEX")%)"
-echo "m: $(days_time "$(time_left "$COMPANY" "$THIS_MONTH_REGEX" "$THIS_WORK_MONTH_REGEX")")($(success_time "$COMPANY" "$THIS_MONTH_REGEX")%)"
+echo "🚶🏢 $(leave_time "$(time_left "$COMPANY" "$TODAY_REGEX")")~$(hours_time "$(time_left "$COMPANY" "$TODAY_REGEX")")"
+echo "7️⃣ $(hours_time "$(time_left "$COMPANY" "$THIS_WEEK_REGEX")")"
+echo "🌕 $(days_time "$(time_left "$COMPANY" "$THIS_MONTH_REGEX" "$THIS_WORK_MONTH_REGEX")")"
+echo "$(success_time "$COMPANY" "$TODAY_REGEX")$(success_time "$COMPANY" "$THIS_WEEK_REGEX")$(success_time "$COMPANY" "$THIS_MONTH_REGEX")"
 if [ -n "$2" ] ; then
   echo "Working days worked: $(working_days_worked "$COMPANY" "$THIS_WORK_MONTH_REGEX")"
   worked=$(worked_time ""$COMPANY"-oncall" "$THIS_MONTH_REGEX")
