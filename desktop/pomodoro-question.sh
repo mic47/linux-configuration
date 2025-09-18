@@ -93,11 +93,10 @@ COMBO_VALUES=$(python \
       | awk '{if (a[$0] != 1) {print($0); a[$0] = 1}}'
   ) \
   <(echo "other" ;
-    grep --with-filename '\(^ *- *\[ \]\|^ *\[ \]\)' $(\
+    grep --with-filename '\(^ *- *\[ \]\|^ *\[ \]\|^\[ \] *\(t\|s\) \|^##* *\(s\|t\)\)\|^##* *\[ \] *\(s\|t\)' $(\
     (
       ls \
-        /home/$USER/Documents/WorkNotext.md \
-        /home/$USER/Documents/WorkLog/*/*/*.md \
+        /home/$USER/TODO.tasks \
         | sort -r \
       ; \
       ls \
@@ -105,8 +104,8 @@ COMBO_VALUES=$(python \
         | sort -r \
       ) \
     ) \
-    | sed -e 's/^\/home\/[^\/]*\/Documents\///;s/^\/home\/[^\/]*\/Dropbox\/Wiki\///' \
-    | sed -e 's/:- *\[ *\] */:/;s/: *\[ *\] */:/;s/ *$//'
+    | sed -e 's/^\/home\/[^\/]*\/Documents\///;s/^\/home\/[^\/]*\/Dropbox\/Wiki\///;s/^\/home\/[^\/]*\///;' \
+    | sed -e 's/:##* */:/;s/:- *\[ *\] */:/;s/: *\[ *\] */:/;s/ *$//;s/:\[ \] */:/'
   ) | tr '\n' '|'
 )
 
