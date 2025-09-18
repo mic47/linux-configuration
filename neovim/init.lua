@@ -91,6 +91,35 @@ require("lazy").setup({
   },
 })
 
+local function set_signify_ref(ref)
+  local cmd
+
+  if ref == "master" or ref == "main" then
+    -- Compare against merge-base with origin/<ref>
+    cmd = string.format(
+      "git diff --no-color -U0 $(git merge-base HEAD origin/%s) -- %%f",
+      ref
+    )
+  else
+    -- Compare directly to the ref
+    cmd = string.format("git diff --no-color -U0 %s -- %%f", ref)
+  end
+
+  vim.g.signify_vcs_cmds = { git = cmd }
+  vim.cmd("SignifyRefresh")
+
+  vim.notify("signify: comparing to " .. ref, vim.log.levels.INFO)
+end
+
+vim.api.nvim_create_user_command("SignifyRef", function(opts)
+  set_signify_ref(opts.args)
+end, {
+  nargs = 1,
+  complete = function()
+    return { "HEAD", "master", "main" }
+  end,
+})
+
 vim.opt.conceallevel = 1
 
 -- Disable Copilot's default <Tab> mapping
