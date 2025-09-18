@@ -93,6 +93,12 @@ require("lazy").setup({
 
 vim.opt.conceallevel = 1
 
+-- Disable Copilot's default <Tab> mapping
+vim.g.copilot_no_tab_map = true
+
+-- Map Altl+Enter to accept Copilot suggestion
+vim.api.nvim_set_keymap("i", "<M-CR>", 'copilot#Accept("<CR>")', { silent = true, expr = true, script = true })
+
 -- Setup rust
 require("mason").setup()
 require("mason-lspconfig").setup()
