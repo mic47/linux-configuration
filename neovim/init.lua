@@ -91,6 +91,25 @@ require("lazy").setup({
   },
 })
 
+vim.api.nvim_create_user_command("NextUnsavedBuffer", function()
+  local bufs = vim.api.nvim_list_bufs()
+  local current = vim.api.nvim_get_current_buf()
+  local found_current = false
+
+  for _, b in ipairs(bufs) do
+    if vim.api.nvim_buf_is_loaded(b) and vim.bo[b].modified then
+      if found_current then
+        vim.api.nvim_set_current_buf(b)
+        return
+      end
+    end
+    if b == current then
+      found_current = true
+    end
+  end
+  print("No more unsaved buffers")
+end, {})
+
 local function set_signify_ref(ref)
   local cmd
 
