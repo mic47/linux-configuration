@@ -126,10 +126,10 @@ end
 -- Prettier
 vim.cmd([[
 let g:neoformat_try_node_exe = 1
-autocmd BufWritePre *.js Neoformat
-autocmd BufWritePre *.ts Neoformat
-autocmd BufWritePre *.jsx Neoformat
-autocmd BufWritePre *.tsx Neoformat
+autocmd BufWritePre *.js Neoformat prettier
+autocmd BufWritePre *.ts Neoformat prettier
+autocmd BufWritePre *.jsx Neoformat prettier
+autocmd BufWritePre *.tsx Neoformat prettier
 ]])
 
 -- General settings
