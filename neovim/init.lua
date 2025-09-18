@@ -139,6 +139,11 @@ end, {
   end,
 })
 
+vim.api.nvim_create_user_command("Errors", function()
+  vim.diagnostic.setqflist()
+end, {})
+
+
 vim.opt.conceallevel = 1
 
 -- Disable Copilot's default <Tab> mapping
