@@ -33,6 +33,7 @@ do
   pomodoro=$(pomodoro-client status | sed -e 's/Pomodoro/🍅/')
   # Documents/WorkLog/2022/02/10.md
   TODO=$(cat $(ls /home/$USER/Documents/WorkNotext.md /home/$USER/Documents/WorkLog/*/*/*.md | sort -r) | grep '[-] \[ \]' | head -n 1)
+  AUTORANDR=$(autorandr  --current | head -n 1 2> /dev/null)
   TOP_PROCESS=$(
     ps -xa -o %mem=,comm= --sort=-%mem \
     | sed -e 's/^ *//;s/ *$//;s/  */ /;s/WebContent\|WebExtensions\|Web\|Isolated .*\|RDD/firefox/' \
@@ -60,5 +61,5 @@ do
       | tee -a ~/.logs/i3-oom-killer.log
     fi | tr -d '\n'
   )
-  echo "$TODO | $work_today $pomodoro | ${TOP_PROCESS}${KILLED} | $TOP_CPU_PROCESS | $(echo "$line" | prettify_statusline | tr '\n' ' ')" || exit 1
+  echo "$AUTORANDR | $TODO | $work_today $pomodoro | ${TOP_PROCESS}${KILLED} | $TOP_CPU_PROCESS | $(echo "$line" | prettify_statusline | tr '\n' ' ')" || exit 1
 done
