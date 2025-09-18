@@ -7,6 +7,7 @@ vim.g.localleader = "\\"
 
 
 vim.cmd('colorscheme vim')
+vim.api.nvim_set_hl(0, "InlayHintCustom", { fg = "#ccaa33", italic = true })
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -35,6 +36,7 @@ require("lazy").setup({
   "hrsh7th/cmp-nvim-lsp-signature-help",
   "hrsh7th/cmp-path",
   "hrsh7th/cmp-buffer",
+  "vito-c/jq.vim",
   "nvim-treesitter/nvim-treesitter",
   "tpope/vim-fugitive",
   --
@@ -58,9 +60,28 @@ require("lazy").setup({
     },
   },
   --
+  "hrsh7th/vscode-langservers-extracted",
   "mic47/platypus-vim-code-browse",
   { 'junegunn/fzf.vim', dependencies = { 'junegunn/fzf' } },
   "sbdchd/neoformat",
+  {
+     "mhinz/vim-signify",
+     init = function()
+      -- Customize signs
+      -- vim.g.signify_sign_add    = '+'
+      -- vim.g.signify_sign_delete = '_'
+       -- vim.g.signify_sign_change = '~'
+
+      -- Real-time updates
+      vim.g.signify_realtime = 1
+      vim.g.signify_update_on_bufenter = 1
+
+      -- Diff against master branch
+      vim.g.signify_vcs_cmds = {
+        git = "git --no-pager diff --no-color -U0 $(git merge-base HEAD origin/master) -- %f"
+      }
+    end,
+  },
   {
     "pmizio/typescript-tools.nvim",
     dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
@@ -168,7 +189,7 @@ rt.setup({
   },
   tools = {
     inlay_hints = {
-      highlight = "TypeHint",
+      highlight = "InlayHintCustom",
     }
   }
 })
@@ -236,6 +257,7 @@ vim.api.nvim_set_option('updatetime', 300)
 -- Show inlay_hints more frequently 
 vim.cmd([[
 set signcolumn=yes
+autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
 ]])
 
 -- Completion Plugin Setup
@@ -319,13 +341,29 @@ lspconfig.pylsp.setup {
         debounce_text_changes = 200,
     },
 }
+require('lspconfig').terraformls.setup {}
+require('lspconfig').tflint.setup {}
+lspconfig.rust_analyzer.setup = {
+    settings = {
+        ["rust-analyzer"] = {
+            rustfmt = {
+            },
+            check = {
+            }
+        },
+    },
+}
 
 
 -- Treesitter Plugin Setup 
 
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all" (the listed parsers MUST always be installed)
-  ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "rust", "python", "typescript", "javascript", "html" },
+  ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "rust", "python", "typescript", "javascript", "html", "terraform" },
+  highlight={
+    enable=true,
+    disable = { "rust", "lua" },
+  }
 }
 
 -- Hide semantic highlights for functions
@@ -340,3 +378,4 @@ require("tmux")
 require("tasks")
 require("settings")
 require("mappings")
+require("git")
