@@ -15,6 +15,13 @@ select_worktree() {
   DIRECTORY_RELATIVE_TO_HOME=$(
     (
       # Put shortcuts here
+      tmux list-sessions \
+        | grep '/' \
+        | sed -e 's|^\([^:]*\)-[0-9]*:.*\((created [^)]*)\).*$|\2,\1|' \
+        | sort \
+        | cut -d, -f 2  \
+        | parallel 'echo -n $HOME/ ; echo {} | tr -d "\n" | tr "/" "\n" | tac | tr "\n" "/" ; echo' \
+        | parallel 'pushd {} > /dev/null; echo {} [rr{#}] [$(git rev-parse --short HEAD)] [$(git branch --show-current)] ; popd > /dev/null'
       for directory in "$@" ; do
         pushd "$directory" > /dev/null 2> /dev/null || echo "$directory"
         git worktree list 2> /dev/null || echo "$directory"
