@@ -51,5 +51,14 @@ do
     | prettify_processes \
     | tr '\n' ' '
   )
-  echo "$TODO | $work_today $pomodoro | $TOP_PROCESS | $TOP_CPU_PROCESS | $(echo "$line" | prettify_statusline | tr '\n' ' ')" || exit 1
+  KILLED=$(
+    if [ $(cat /proc/meminfo  | grep MemAvailable | sed -e 's/  */ /g' | cut -f 2 -d' ') -lt 1500000 ] ; then
+      ps uax --sort=-%mem \
+      | awk 'NR==2 {print $2,$11,$4}' \
+      | tee >(cut -d' ' -f 1 | parallel kill -9 {} ) \
+      | parallel 'echo "$(date) killed {}"' \
+      | tee -a ~/.logs/i3-oom-killer.log
+    fi | tr -d '\n'
+  )
+  echo "$TODO | $work_today $pomodoro | ${TOP_PROCESS}${KILLED} | $TOP_CPU_PROCESS | $(echo "$line" | prettify_statusline | tr '\n' ' ')" || exit 1
 done
