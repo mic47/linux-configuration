@@ -16,8 +16,8 @@ source $SOURCE_DIR/bash/prompt.sh
 source $SOURCE_DIR/bash/fzf.sh
 # ====== Default program settings =====
 
-export SVN_EDITOR=vim
-export EDITOR=vim
+export SVN_EDITOR=nvim
+export EDITOR=nvim
 export PYTHONSTARTUP=~/.pystartup
 export BC_LINE_LENGTH=0
 
