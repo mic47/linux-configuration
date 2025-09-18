@@ -21,6 +21,7 @@ select_worktree() {
         | sort \
         | cut -d, -f 2  \
         | parallel 'echo -n $HOME/ ; echo {} | tr -d "\n" | tr "/" "\n" | tac | tr "\n" "/" ; echo' \
+        | sed -e 's|//*|/|g' \
         | parallel 'pushd {} > /dev/null; echo {} [rr{#}] [$(git rev-parse --short HEAD)] [$(git branch --show-current)] ; popd > /dev/null'
       for directory in "$@" ; do
         pushd "$directory" > /dev/null 2> /dev/null || echo "$directory"
