@@ -1,4 +1,6 @@
-echo "USE NEOVIM!"
+if !&diff
+  echo "USE NEOVIM!"
+endif
 "
 " Mic's .vimrc 
 " inspired by .vimrc by MisoF (http://people.ksp.sk/~misof/programy/vimrc.html)
